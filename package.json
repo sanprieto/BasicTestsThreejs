@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "poi index.html --serve",
+    "build": "poi index.html --prod"
+  },
+  "devDependencies": {
+    "poi": "^12.7.2"
+  },
+  "name": "s",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "three": "^0.108.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "description": ""
+}
