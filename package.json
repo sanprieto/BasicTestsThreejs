@@ -1,0 +1,22 @@
+{
+  "name": "theway",
+  "version": "1.0.0",
+  "description": "threejs experiments",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanprieto/BasicTestsThreejs.git"
+  },
+  "keywords": [
+    "threejs"
+  ],
+  "author": "Ricardo Sanprieto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sanprieto/BasicTestsThreejs/issues"
+  },
+  "homepage": "https://github.com/sanprieto/BasicTestsThreejs#readme"
+}

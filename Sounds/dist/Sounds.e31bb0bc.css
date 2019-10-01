@@ -1,0 +1,18 @@
+body {
+  margin: 0px;
+  //overflow: hidden;
+  color: white;
+  text-align: center;
+}
+#magic{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+#push, #audioInputLabel{
+
+	position: absolute;
+	top: 60px;
+}
+
+/*# sourceMappingURL=/Sounds.e31bb0bc.css.map */

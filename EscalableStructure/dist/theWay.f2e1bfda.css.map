@@ -1,0 +1,1 @@
+{"version":3,"sources":["main.css"],"names":[],"mappings":"AAAA,KACE,QAAW,CACX,iBAAkB,CAClB,UAAY,CACZ,iBACF,CACA,OACE,iBAAkB,CAClB,SAAU,CACV,UACF","file":"theWay.f2e1bfda.css","sourceRoot":"..","sourcesContent":["body {\n  margin: 0px;\n  //overflow: hidden;\n  color: white;\n  text-align: center;\n}\n#magic{\n  position: absolute;\n  width: 50%;\n  height: 50%;\n}"]}

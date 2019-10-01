@@ -1,0 +1,13 @@
+body {
+  margin: 0px;
+  //overflow: hidden;
+  color: white;
+  text-align: center;
+}
+#magic{
+  position: absolute;
+  width: 50%;
+  height: 50%;
+}
+
+/*# sourceMappingURL=/App.e31bb0bc.css.map */

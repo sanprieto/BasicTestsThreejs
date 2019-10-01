@@ -1,0 +1,1 @@
+{"version":3,"sources":["css/main.css"],"names":[],"mappings":"AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA","file":"App.e31bb0bc.css","sourceRoot":"..","sourcesContent":["body {\n  margin: 0px;\n  //overflow: hidden;\n  color: white;\n  text-align: center;\n}\n#magic{\n  position: absolute;\n  width: 50%;\n  height: 50%;\n}"]}
