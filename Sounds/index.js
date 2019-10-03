@@ -29,7 +29,7 @@ document.querySelector('button').addEventListener('click', function() {
     sound.setVolume( 0.5 );
     sound.play();
   });
-  console.log( listener.context.state )
+  console.log( 'audio',listener.context.state )
 });
 
 function init() {
