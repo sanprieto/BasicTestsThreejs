@@ -18,12 +18,12 @@ function init() {
   scene = new THREE.Scene();
   scene.background = new THREE.Color( 0x5C8AE6 );
 
-  camera = createCamera( camera, container );
+  camera = createCamera( container );
   createOrbitControls( camera, container );
   createLights( scene );
-  cube = createMeshes( cube, scene );
+  cube = createMeshes( scene );
 
-  renderer = createRenderer( renderer, container );
+  renderer = createRenderer( container );
 
   renderer.setAnimationLoop( () => {
 

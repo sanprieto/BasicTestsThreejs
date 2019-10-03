@@ -5,7 +5,7 @@ function createMaterials() {
   const logoBlue = new THREE.MeshPhongMaterial( {
     color: 0xce17da,
     side:THREE.DoubleSide
-    //flatShading: true,
+    
   } );
 
   logoBlue.color.convertSRGBToLinear();
@@ -21,12 +21,12 @@ function createGeometries() {
   return box;
 }
 
-function createMeshes( obj, scene ) {
+function createMeshes( scene ) {
 
   const materials = createMaterials();
   const geometries = createGeometries();
 
-  obj = new THREE.Mesh( geometries, materials );
+  const obj = new THREE.Mesh( geometries, materials );
   scene.add( obj );
 
   return obj;
