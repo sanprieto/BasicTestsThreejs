@@ -24,7 +24,7 @@ function init() {
   camera = createCamera( container );
 
   beep = createMusic( camera, urlData );
-  console.log( beep );
+  console.log( beep.analyser.fftSize );
 
   createOrbitControls( camera, container );
   createLights( scene );
