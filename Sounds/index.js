@@ -4,33 +4,15 @@ import { createCamera, createRenderer } from '/js/basicComponents';
 import { createOrbitControls } from '/js/sceneControls';
 import { createLights } from '/js/lights';
 import { createMeshes } from '/js/objects';
+import { createMusic } from '/js/theMusic';
 
+const urlData = require('./music/dos.ogg');
 let camera;
 let container;
 let renderer;
 let scene;
 let cube;
-
-document.querySelector('button').addEventListener('click', function() {
-
-  // create an AudioListener and add it to the camera
-  var listener = new THREE.AudioListener();
-  camera.add( listener );
-
-  // create a global audio source
-  var sound = new THREE.Audio( listener );
-
-  // load a sound and set it as the Audio object's buffer
-  var audioLoader = new THREE.AudioLoader();
-
-  audioLoader.load( './dos.ogg', function( buffer ) {
-    sound.setBuffer( buffer );
-    sound.setLoop( true );
-    sound.setVolume( 0.5 );
-    sound.play();
-  });
-  console.log( 'audio',listener.context.state )
-});
+let beep;
 
 function init() {
 
@@ -40,6 +22,10 @@ function init() {
   scene.background = new THREE.Color( 0x5C8AE6 );
 
   camera = createCamera( container );
+
+  beep = createMusic( camera, urlData );
+  console.log( beep );
+
   createOrbitControls( camera, container );
   createLights( scene );
   cube = createMeshes( scene );
@@ -56,7 +42,7 @@ function init() {
 }
 
 function update() {
-
+  //console.log( bing.getFrequencyData() )
 	cube.rotation.z += 0.03;
 	cube.rotation.x -= 0.01;
 }
