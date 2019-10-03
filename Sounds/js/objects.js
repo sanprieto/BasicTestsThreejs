@@ -2,15 +2,15 @@ import * as THREE from 'three';
 
 function createMaterials() {
 
-  const colorMat = new THREE.MeshPhongMaterial( {
-    color: '#FFB5D9',
+  const mat = new THREE.MeshPhongMaterial( {
+    color: 0xce17da,
     side:THREE.DoubleSide
-    //flatShading: true,
+
   } );
 
-  colorMat.color.convertSRGBToLinear();
+  mat.color.convertSRGBToLinear();
 
-  return colorMat;
+  return mat;
 
 }
 
@@ -21,12 +21,12 @@ function createGeometries() {
   return box;
 }
 
-function createMeshes( obj, scene ) {
+function createMeshes( scene ) {
 
   const materials = createMaterials();
   const geometries = createGeometries();
 
-  obj = new THREE.Mesh( geometries, materials );
+  const obj = new THREE.Mesh( geometries, materials );
   scene.add( obj );
 
   return obj;

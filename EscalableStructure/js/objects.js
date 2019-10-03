@@ -5,7 +5,7 @@ function createMaterials() {
   const logoBlue = new THREE.MeshPhongMaterial( {
     color: 0xce17da,
     side:THREE.DoubleSide
-    
+
   } );
 
   logoBlue.color.convertSRGBToLinear();

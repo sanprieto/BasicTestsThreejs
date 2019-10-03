@@ -1,10 +1,8 @@
 import * as THREE from 'three';
 
-
-
 function createCamera( container ) { 
 
-  let cam = new THREE.PerspectiveCamera( 35, container.clientWidth / container.clientHeight, 0.1, 100 );
+  const cam = new THREE.PerspectiveCamera( 35, container.clientWidth / container.clientHeight, 0.1, 100 );
   cam.position.set( -5, 5, 7 );
 
   return cam;
@@ -13,7 +11,7 @@ function createCamera( container ) {
 
 function createRenderer( container ) {
 
-  let renderer = new THREE.WebGLRenderer( { antialias: true } );
+  const renderer = new THREE.WebGLRenderer( { antialias: true } );
   renderer.setSize( container.clientWidth, container.clientHeight );
 
   renderer.setPixelRatio( window.devicePixelRatio );
