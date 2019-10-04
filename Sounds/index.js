@@ -11,7 +11,7 @@ let camera;
 let container;
 let renderer;
 let scene;
-let cube;
+let cubes;
 let beep;
 
 function init() {
@@ -24,11 +24,12 @@ function init() {
   camera = createCamera( container );
 
   beep = createMusic( camera, urlData );
-  console.log( beep.analyser.fftSize );
+  console.log( beep );
 
   createOrbitControls( camera, container );
   createLights( scene );
-  cube = createMeshes( scene );
+  cubes = createMeshes( scene );
+  console.log(scene)
 
   renderer = createRenderer( container );
 
@@ -42,9 +43,13 @@ function init() {
 }
 
 function update() {
-  //console.log( bing.getFrequencyData() )
-	cube.rotation.z += 0.03;
-	cube.rotation.x -= 0.01;
+
+  for ( var i = 0; i < 16; i ++ ) {
+
+    cubes[i].position.y = beep.getFrequencyData()[i];
+  }
+  //console.log( beep.getFrequencyData() )
+
 }
 
 function render() {

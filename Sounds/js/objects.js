@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 
+let objects = [];
+
 function createMaterials() {
 
   const mat = new THREE.MeshPhongMaterial( {
@@ -23,13 +25,19 @@ function createGeometries() {
 
 function createMeshes( scene ) {
 
-  const materials = createMaterials();
-  const geometries = createGeometries();
+  for ( var i = 0; i < 16; i ++ ) {
 
-  const obj = new THREE.Mesh( geometries, materials );
-  scene.add( obj );
+    const materials = createMaterials();
+    const geometries = createGeometries();
 
-  return obj;
+    let obj = new THREE.Mesh( geometries, materials );
+    obj.position.x = i-8;
+    scene.add( obj );
+    objects.push(obj)
+
+  }
+
+  return objects;
 
 }
 

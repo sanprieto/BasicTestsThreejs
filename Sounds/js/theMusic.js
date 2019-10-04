@@ -16,14 +16,20 @@ function createMusic( camera, urlData ){
 	  sound.setBuffer( buffer );
 	  sound.setLoop( true );
 	  sound.setVolume( 0.5 );
-	  sound.play();
+	  //sound.play();
 	});
 
 	// create an AudioAnalyser, passing in the sound and desired fftSize
-	var analyser = new THREE.AudioAnalyser( sound, 32 );
+	let analyser = new THREE.AudioAnalyser( sound,32 );
+	
+	
+	analyser.analyser.maxDecibels = -30; // -30
+	analyser.analyser.minDecibels = -100; // -100
+	
 
 	// get the average frequency of the sound
 	var data = analyser.getFrequencyData();
+	console.log( 'data', data );
 
 	return analyser;
 
