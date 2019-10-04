@@ -16,7 +16,7 @@ function createMusic( camera, urlData ){
 	  sound.setBuffer( buffer );
 	  sound.setLoop( true );
 	  sound.setVolume( 0.5 );
-	  //sound.play();
+	  sound.play();
 	});
 
 	// create an AudioAnalyser, passing in the sound and desired fftSize

@@ -5,7 +5,7 @@ let objects = [];
 function createMaterials() {
 
   const mat = new THREE.MeshPhongMaterial( {
-    color: 0xce17da,
+    color: 0x6699FF,
     side:THREE.DoubleSide
 
   } );
@@ -18,7 +18,8 @@ function createMaterials() {
 
 function createGeometries() {
 
-  const box = new THREE.BoxBufferGeometry( 2, 2.25, 1.5 );
+  const box = new THREE.BoxBufferGeometry();
+  box.translate( 0, 0.5, 0 );
 
   return box;
 }
@@ -32,6 +33,7 @@ function createMeshes( scene ) {
 
     let obj = new THREE.Mesh( geometries, materials );
     obj.position.x = i-8;
+    obj.position.y = -5;
     scene.add( obj );
     objects.push(obj)
 

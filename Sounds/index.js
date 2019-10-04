@@ -14,12 +14,16 @@ let scene;
 let cubes;
 let beep;
 
+document.querySelector('button').addEventListener('click', function() {
+  init();
+});
+
 function init() {
 
   container = document.querySelector( '#magic' );
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color( 0x5C8AE6 );
+  scene.background = new THREE.Color( 0xFFFFFF );
 
   camera = createCamera( container );
 
@@ -46,9 +50,12 @@ function update() {
 
   for ( var i = 0; i < 16; i ++ ) {
 
-    cubes[i].position.y = beep.getFrequencyData()[i];
+    if(beep.getFrequencyData()[i] >=1 ){
+      cubes[i].scale.y = beep.getFrequencyData()[i]*0.05;
+    }
+    console.log ();
+    cubes[i].material.color.setHSL( beep.getFrequencyData()[i] /100 +0.2 , 0.9, 0.6 );
   }
-  //console.log( beep.getFrequencyData() )
 
 }
 
@@ -68,5 +75,5 @@ function onWindowResize() {
 
 window.addEventListener( 'resize', onWindowResize );
 
-init();
+//init();
 
