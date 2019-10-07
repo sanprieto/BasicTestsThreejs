@@ -53,8 +53,7 @@ function update() {
     if(beep.getFrequencyData()[i] >=1 ){
       cubes[i].scale.y = beep.getFrequencyData()[i]*0.05;
     }
-    console.log ();
-    cubes[i].material.color.setHSL( beep.getFrequencyData()[i] /100 +0.2 , 0.9, 0.6 );
+    cubes[i].material.color.setHSL( beep.getFrequencyData()[i] /255 , 0.9, 0.6 );
   }
 
 }
