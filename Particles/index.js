@@ -4,36 +4,28 @@ import { createCamera, createRenderer } from '/js/basicComponents';
 import { createOrbitControls } from '/js/sceneControls';
 import { createLights } from '/js/lights';
 import { createMeshes } from '/js/objects';
-import { createMusic } from '/js/theMusic';
 
-const urlData = require('./music/dos.ogg');
+
 let camera;
 let container;
 let renderer;
 let scene;
-let cubes;
-let beep;
+let particles;
 
-document.querySelector('button').addEventListener('click', function() {
-  init();
-});
 
 function init() {
+
 
   container = document.querySelector( '#magic' );
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color( 0xFFFFFF );
+  scene.background = new THREE.Color( 0x000000 );
 
   camera = createCamera( container );
-
-  beep = createMusic( camera, urlData );
-  console.log( beep );
-
   createOrbitControls( camera, container );
   createLights( scene );
-  cubes = createMeshes( scene );
-  console.log(scene)
+  particles  = createMeshes( scene );
+
 
   renderer = createRenderer( container );
 
@@ -48,12 +40,15 @@ function init() {
 
 function update() {
 
-  for ( var i = 0; i < 16; i ++ ) {
+  const time = ((.001 * performance.now())  % 15 ) / 15;
 
-    if(beep.getFrequencyData()[i] >=1 ){
-      cubes[i].scale.y = beep.getFrequencyData()[i] * 0.05;
-    }
-    cubes[i].material.color.setHSL( beep.getFrequencyData()[i] /255 , 0.9, 0.6 );
+  for (let i = 0; i < 3; i++) {
+
+    particles [i].rotation.z = .0001 * performance.now() + i ;
+    particles [i].rotation.y = .00003 * performance.now() + i ;
+    particles [i].rotation.x = .00003 * performance.now() * i ;
+    particles [i].material.color.setHSL(  time + (i*.2) , 0.9, 0.6 );
+
   }
 
 }
@@ -74,5 +69,5 @@ function onWindowResize() {
 
 window.addEventListener( 'resize', onWindowResize );
 
-//init();
+init();
 
