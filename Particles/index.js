@@ -5,16 +5,13 @@ import { createOrbitControls } from '/js/sceneControls';
 import { createLights } from '/js/lights';
 import { createMeshes } from '/js/objects';
 
-
 let camera;
 let container;
 let renderer;
 let scene;
 let particles;
 
-
 function init() {
-
 
   container = document.querySelector( '#magic' );
 
@@ -25,7 +22,6 @@ function init() {
   createOrbitControls( camera, container );
   createLights( scene );
   particles  = createMeshes( scene );
-
 
   renderer = createRenderer( container );
 
