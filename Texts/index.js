@@ -7,12 +7,12 @@ import { createMeshes } from '/js/objects';
 import Stats from 'stats.js';
 //import { createText } from '/js/myTexts';
 import fontURL from './fonts/Montserrat_Regular.typeface.json';
-
+//const fontURL = require('./fonts/Montserrat_Regular.typeface.json');
 
 console.log( fontURL )
 
 const loader = new THREE.FontLoader();
-//const json = JSON.parse( fontURL ); // you have to parse the data so it becomes a JS object 
+//const json = JSON.parse( fontURL ); 
 //const font = loader.parse( json );
 
 loader.load( fontURL , function ( font ) {
