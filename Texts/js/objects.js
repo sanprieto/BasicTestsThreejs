@@ -3,7 +3,7 @@ import * as THREE from 'three';
 function createMaterials() {
 
   const logoBlue = new THREE.MeshPhongMaterial( {
-    color: 0x6699ff,
+    color: 0xce17da,
     side:THREE.DoubleSide
 
   } );
