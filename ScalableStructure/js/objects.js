@@ -16,7 +16,7 @@ function createMaterials() {
 
 function createGeometries() {
 
-  const box = new THREE.BoxBufferGeometry( 2, 2.25, 1.5 );
+  const box = new THREE.BoxBufferGeometry( );
 
   return box;
 }

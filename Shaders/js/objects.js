@@ -20,7 +20,7 @@ function createGeometries() {
 
   var radius = 50, segments = 128, rings = 64;
 
-  const geometry = new THREE.SphereBufferGeometry( radius, segments, rings );
+  const geometry = new THREE.BoxBufferGeometry( radius, segments, rings );
 
   displacement = new Float32Array( geometry.attributes.position.count );
   noise = new Float32Array( geometry.attributes.position.count );

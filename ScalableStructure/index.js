@@ -4,6 +4,10 @@ import { createCamera, createRenderer } from '/js/basicComponents';
 import { createOrbitControls } from '/js/sceneControls';
 import { createLights } from '/js/lights';
 import { createMeshes } from '/js/objects';
+import Stats from 'stats.js';
+
+let stats = new Stats();
+document.body.appendChild( stats.dom );
 
 let camera;
 let container;
@@ -35,7 +39,7 @@ function init() {
 }
 
 function update() {
-
+  stats.update();
 	cube.rotation.z += 0.03;
 	cube.rotation.x -= 0.01;
 }
