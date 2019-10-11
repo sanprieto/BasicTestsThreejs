@@ -5,30 +5,7 @@ import { createOrbitControls } from '/js/sceneControls';
 import { createLights } from '/js/lights';
 import { createMeshes } from '/js/objects';
 import Stats from 'stats.js';
-//import { createText } from '/js/myTexts';
-import fontURL from './fonts/Montserrat_Regular.typeface.json';
-//const fontURL = require('./fonts/Montserrat_Regular.typeface.json');
-
-console.log( fontURL )
-
-const loader = new THREE.FontLoader();
-//const json = JSON.parse( fontURL ); 
-//const font = loader.parse( json );
-
-loader.load( fontURL , function ( font ) {
-
-  var geometry = new THREE.TextGeometry( 'Hello three.js!', {
-    font: font,
-    size: 80,
-    height: 5,
-    curveSegments: 12,
-    bevelEnabled: true,
-    bevelThickness: 10,
-    bevelSize: 8,
-    bevelOffset: 0,
-    bevelSegments: 5
-  } );
-} );
+import { createTextByLines, createTextByLetters } from '/js/myTexts';
 
 let stats = new Stats();
 document.body.appendChild( stats.dom );
@@ -38,6 +15,7 @@ let container;
 let renderer;
 let scene;
 let cube;
+let texts;
 
 function init() {
 
@@ -49,7 +27,11 @@ function init() {
   camera = createCamera( container );
   createOrbitControls( camera, container );
   createLights( scene );
-  cube = createMeshes( scene );
+
+  //texts = createTextByLines( scene, 'Everything you \ncan imagine \nis real' );
+  texts = createTextByLetters( scene, 'Everything you \ncan imagine \nis real' );
+  
+  //cube = createMeshes( scene );
 
   renderer = createRenderer( container );
 
@@ -63,9 +45,15 @@ function init() {
 }
 
 function update() {
+
   stats.update();
-	cube.rotation.z += 0.03;
-	cube.rotation.x -= 0.01;
+
+  texts.forEach( ( obj,i ) => {
+ 
+    obj.rotation.y += 0.001 * i ;
+    obj.rotation.x += 0.001 * i ;
+
+  } );
 }
 
 function render() {
