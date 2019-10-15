@@ -3,7 +3,7 @@ import '/css/main.css';
 import { createCamera, createRenderer } from '/js/basicComponents';
 import { createOrbitControls } from '/js/sceneControls';
 import { createLights } from '/js/lights';
-import { createMeshes } from '/js/objects';
+import { createMeshes, createGridHelp } from '/js/objects';
 import Stats from 'stats.js';
 
 let stats = new Stats();
@@ -20,11 +20,12 @@ function init() {
   container = document.querySelector( '#magic' );
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color( 0xB3CCFF );
+  scene.background = new THREE.Color( 0xffffff );
 
   camera = createCamera( container );
   createOrbitControls( camera, container );
   createLights( scene );
+  createGridHelp( scene )
   cube = createMeshes( scene );
 
   renderer = createRenderer( container );
