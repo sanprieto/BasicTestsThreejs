@@ -18,7 +18,7 @@ function createMaterials() {
 
 function createGeometries() {
 
-  const box = new THREE.SphereGeometry(.2);
+  const box = new THREE.SphereGeometry(.5);
 
   return box;
 }
