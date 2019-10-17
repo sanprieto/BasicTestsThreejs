@@ -6,21 +6,18 @@ import { createLights } from '/js/lights';
 import { createMeshes, createGridHelp } from '/js/objects';
 import Stats from 'stats.js';
 import { createPath, drawPath } from '/js/myPaths';
+import { createMusic } from '/js/theMusic';
 
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera;
-let container;
-let renderer;
-let scene;
-let cubes;
-let path;
+let camera,container, renderer, scene, path, lines , lines2, axis, tangent, radians, beep, cubes ;
 let up = new THREE.Vector3( 0, 1, 0 );
-let axis, tangent, radians;
-let circumference = 5;
-let heightY = 5;
-let line;
+let circumference = 1;
+let heightY = 15;
+
+const urlData = require('./music/o.mp3');
+//const urlData = require('./music/engine.mp3');
 
 function init() {
 
@@ -32,12 +29,17 @@ function init() {
   camera = createCamera( container );
   createOrbitControls( camera, container );
   createLights( scene );
-  createGridHelp( scene )
-  cubes = createMeshes( scene );
 
-  path = new createPath( circumference ,heightY );
+  beep = createMusic( camera, urlData );
+  
+  for ( let o = 0; o < 200; o++ ) {
 
-  line = drawPath( path, scene );
+    path = new createPath( circumference ,heightY );
+    lines = drawPath( path, scene, 0x000000 );
+    circumference = circumference + .12;
+    //heightY = heightY - .1;
+  }
+  console.log( lines );
 
   renderer = createRenderer( container );
 
@@ -52,27 +54,36 @@ function init() {
 
 function update() {
   stats.update();
-  
-  const time = ((.001 * performance.now())  % 2 ) / 2;
-  const point = path.getPoint( time );
 
-  if( time >0.988){
+  const time = ( 0.0001 * performance.now() ) % 15;
 
-    path = new createPath( circumference , heightY  );
-    circumference = circumference - .05;
-    heightY = heightY + .05;
-    drawPath( path, scene );
-   
+  for (let i = 0; i < 200; i++) {
+
+
+
+    
+
+    if( beep.getFrequencyData()[i] >=1 ){
+
+      lines[i].rotation.z = THREE.Math.degToRad( beep.getFrequencyData()[i]  )
+      lines[i].position.y = beep.getFrequencyData()[i] * 0.05;
+      //lines[i].position.y = beep.getFrequencyData()[i] * 0.09;
+
+    }
+    if(( beep.getFrequencyData()[i] == 0)||(i > 127)){
+
+      lines[i].material.color.setHSL( time , 0.9, 0.7 );
+      lines[i].rotation.y -= 0.005;
+    }else{
+
+      lines[i].material.color.setHSL( beep.getFrequencyData()[i]/255 , 0.9, 0.5 );
+      lines[i].rotation.y -= 0.01;
+    }
+
   }
-    cubes[0].position.x =  point.x;
-    cubes[0].position.y =  point.y;
-    cubes[0].position.z =  point.z;
 
-
-
-
+    
 }
-
 
 function render() {
 
