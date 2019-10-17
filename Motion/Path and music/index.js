@@ -72,11 +72,11 @@ function update() {
     }
     if(( beep.getFrequencyData()[i] == 0)||(i > 127)){
 
-      lines[i].material.color.setHSL( time , 0.9, 0.7 );
+      lines[i].material.color.setHSL( time + i/200 , 0.9, 0.7 );
       lines[i].rotation.y -= 0.005;
     }else{
 
-      lines[i].material.color.setHSL( beep.getFrequencyData()[i]/255 , 0.9, 0.5 );
+      lines[i].material.color.setHSL( beep.getFrequencyData()[i]/255 + i/200 , 0.9, 0.5 );
       lines[i].rotation.y -= 0.01;
     }
 
