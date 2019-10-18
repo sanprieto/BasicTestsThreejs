@@ -19,6 +19,13 @@ let heightY = 15;
 const urlData = require('./music/o.mp3');
 //const urlData = require('./music/engine.mp3');
 
+document.getElementById('buttom').addEventListener('click', function() {
+  document.getElementById('overlay').style.display = "none";
+  beep.sound.play();
+
+
+});
+
 function init() {
 
   container = document.querySelector( '#magic' );
@@ -37,9 +44,8 @@ function init() {
     path = new createPath( circumference ,heightY );
     lines = drawPath( path, scene, 0x000000 );
     circumference = circumference + .12;
-    //heightY = heightY - .1;
+
   }
-  console.log( lines );
 
   renderer = createRenderer( container );
 
@@ -59,30 +65,23 @@ function update() {
 
   for (let i = 0; i < 200; i++) {
 
+    if( beep.analyser.getFrequencyData()[i] >=1 ){
 
-
-    
-
-    if( beep.getFrequencyData()[i] >=1 ){
-
-      lines[i].rotation.z = THREE.Math.degToRad( beep.getFrequencyData()[i]  )
-      lines[i].position.y = beep.getFrequencyData()[i] * 0.05;
-      //lines[i].position.y = beep.getFrequencyData()[i] * 0.09;
+      lines[i].rotation.z = THREE.Math.degToRad( beep.analyser.getFrequencyData()[i]  )
+      lines[i].position.y = beep.analyser.getFrequencyData()[i] * 0.05;
 
     }
-    if(( beep.getFrequencyData()[i] == 0)||(i > 127)){
+    if(( beep.analyser.getFrequencyData()[i] == 0)||(i > 127)){
 
       lines[i].material.color.setHSL( time + i/200 , 0.9, 0.7 );
       lines[i].rotation.y -= 0.005;
     }else{
 
-      lines[i].material.color.setHSL( beep.getFrequencyData()[i]/255 + i/200 , 0.9, 0.5 );
+      lines[i].material.color.setHSL( beep.analyser.getFrequencyData()[i]/255 , 0.9, 0.5 );
       lines[i].rotation.y -= 0.01;
     }
 
-  }
-
-    
+  }    
 }
 
 function render() {
