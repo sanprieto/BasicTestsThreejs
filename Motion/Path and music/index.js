@@ -15,6 +15,7 @@ let camera,container, renderer, scene, path, lines , lines2, axis, tangent, radi
 let up = new THREE.Vector3( 0, 1, 0 );
 let circumference = 1;
 let heightY = 15;
+let amount = 300;
 
 const urlData = require('./music/o.mp3');
 //const urlData = require('./music/engine.mp3');
@@ -39,11 +40,11 @@ function init() {
 
   beep = createMusic( camera, urlData );
   
-  for ( let o = 0; o < 200; o++ ) {
+  for ( let o = 0; o < amount ; o++ ) {
 
     path = new createPath( circumference ,heightY );
     lines = drawPath( path, scene, 0x000000 );
-    circumference = circumference + .12;
+    circumference = circumference + .08;
 
   }
 
@@ -63,7 +64,7 @@ function update() {
 
   const time = ( 0.0001 * performance.now() ) % 15;
 
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < amount ; i++) {
 
     if( beep.analyser.getFrequencyData()[i] >=1 ){
 
@@ -73,11 +74,11 @@ function update() {
     }
     if(( beep.analyser.getFrequencyData()[i] == 0)||(i > 127)){
 
-      lines[i].material.color.setHSL( time + i/200 , 0.9, 0.7 );
+      lines[i].material.color.setHSL( time + i/200 , 1, 0.4 );
       lines[i].rotation.y -= 0.005;
     }else{
 
-      lines[i].material.color.setHSL( beep.analyser.getFrequencyData()[i]/255 , 0.9, 0.5 );
+      lines[i].material.color.setHSL( beep.analyser.getFrequencyData()[i]/255 , 1, 0.5 );
       lines[i].rotation.y -= 0.01;
     }
 
