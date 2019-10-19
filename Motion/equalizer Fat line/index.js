@@ -13,15 +13,20 @@ document.body.appendChild( stats.dom );
 
 let camera,container, renderer, scene, path, lines , lines2, axis, tangent, radians, beep, cubes ;
 let up = new THREE.Vector3( 0, 1, 0 );
-let circumference = 1;
+let circumference = 10;
 let heightY = 15;
+
+// viewport
+var insetWidth;
+var insetHeight;
+
 
 const urlData = require('./music/o.mp3');
 //const urlData = require('./music/engine.mp3');
 
 document.getElementById('buttom').addEventListener('click', function() {
   document.getElementById('overlay').style.display = "none";
-  //beep.sound.play();
+  beep.sound.play();
 
 
 });
@@ -39,13 +44,14 @@ function init() {
 
   beep = createMusic( camera, urlData );
   
-  for ( let o = 0; o < 1; o++ ) {
+  for ( let o = 0; o < 30; o++ ) {
 
-    path = new createPath( circumference ,heightY );
-    lines = drawPath( path, scene, 0x000000 );
-    circumference = circumference + .12;
+    //path = new createPath( circumference ,heightY );
+    lines = drawPath( o,scene, 0x000000 );
+    circumference = circumference + 2;
 
   }
+  console.log( lines )
 
   renderer = createRenderer( container );
 
@@ -62,6 +68,8 @@ function update() {
   stats.update();
 
   const time = ( 0.0001 * performance.now() ) % 15;
+
+
 
 
   /*
@@ -85,6 +93,20 @@ function update() {
     }
 
   }*/ 
+  renderer.setClearColor( 0x000000, 0 );
+
+  renderer.setViewport( 0, 0, window.innerWidth, window.innerHeight );
+  // renderer will set this eventually
+  for (let i = 0; i < 30; i++) {
+
+    lines.lineas[i].rotation.z = THREE.Math.degToRad( beep.analyser.getFrequencyData()[i]  )
+    lines.lineas[i].material.color.setHSL( beep.analyser.getFrequencyData()[i]/255 , 0.9, 0.5 );
+    lines.fatMat[i].resolution.set( window.innerWidth, window.innerHeight ); // resolution of the viewport
+  }
+  //lines.lineas[0].position.y += 0.01;
+  //lines.lineas[1].position.y -= 0.01;
+  renderer.render( scene, camera );
+  renderer.setScissorTest( false );
 }
 
 function render() {

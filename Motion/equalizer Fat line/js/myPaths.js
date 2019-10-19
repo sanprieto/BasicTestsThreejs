@@ -4,11 +4,14 @@ import { LineMaterial } from './lines/LineMaterial.js';
 import { LineGeometry } from './lines/LineGeometry.js';
 import { GeometryUtils } from './utils/GeometryUtils.js';
 
+
 let lineas = [];
+let fatMat = [];
 let lineFat;
 let positions = [];
 let colors = [];
 let matLine, matLineBasic, matLineDashed;
+
 
 function createPath( scale, height ) {
 
@@ -35,14 +38,31 @@ createPath.prototype.getPoint = function ( t ) {
 
 };
 
-function drawPath( path, scene, colores ) {
+function drawPath( o, scene, colores ) {
 
-  let spline = path;
-  let color = new THREE.Color();
+  console.log(o)
+ 
+  var points = GeometryUtils.hilbert3D( new THREE.Vector3( 0, 0, 0 ), 20.0, 1, 0, 1, 2, 3, 4, 5, 6, 7 );
+  console.log( points )
 
-  for ( let i = 0, l = 700; i < l; i ++ ) {
+  var spline = new THREE.CatmullRomCurve3( [
+    new THREE.Vector3( 10, 0, 0 ),
+    new THREE.Vector3( 6, 8, 0 ),
+    new THREE.Vector3( 0, 10, 0 ),
+    new THREE.Vector3( -6, 8, 0 ),
+    new THREE.Vector3( -10, 0, 0 ),
+    new THREE.Vector3( -6, -8, 0 ),
+    new THREE.Vector3( 0, -10, 0 ),
+    new THREE.Vector3( 6, -8, 0 ),
+  ], true );
 
-    let point = spline.getPoint( i / l );
+
+  var divisions = Math.round( 12 * points.length );
+  var color = new THREE.Color();
+
+  for ( var i = 0, l = divisions; i < l; i ++ ) {
+
+    var point = spline.getPoint( i / l );
     positions.push( point.x, point.y, point.z );
 
     color.setHSL( i / l, 1.0, 0.5 );
@@ -52,20 +72,24 @@ function drawPath( path, scene, colores ) {
 
   let geometry = new LineGeometry();
   geometry.setPositions( positions );
-  geometry.setColors( colors );
+
   matLine = new LineMaterial( {
     color: 0xffffff,
-    linewidth: 0.5, // in pixels
+    linewidth: 2, // in pixels
     vertexColors: THREE.VertexColors,
     //resolution:  // to be set by renderer, eventually
     dashed: false
   } );
+
   lineFat = new Line2( geometry, matLine );
   lineFat.computeLineDistances();
   lineFat.scale.set( 1, 1, 1 );
+  lineFat.position.x = o
   scene.add( lineFat);
+  lineas.push( lineFat);
+  fatMat.push( matLine )
 
-  return lineas;
+  return { lineas , fatMat };
 }
 
 export { createPath, drawPath }

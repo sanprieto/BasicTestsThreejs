@@ -11,14 +11,13 @@
  *  resolution: <Vector2>, // to be set by renderer
  * }
  */
-import * as THREE from 'three';
 import {
 	ShaderLib,
 	ShaderMaterial,
 	UniformsLib,
 	UniformsUtils,
 	Vector2
-} from "three";
+} from "../three.module";
 
 UniformsLib.line = {
 
