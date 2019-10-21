@@ -33,4 +33,18 @@ function createMeshes( scene ) {
 
 }
 
-export { createMeshes };
+function createGridHelp( scene ){
+
+  const size = 60;
+  const divisions = 60;
+
+  const gridHelper = new THREE.GridHelper( size, divisions );
+  scene.add( gridHelper );
+
+  const axesHelper = new THREE.AxesHelper( 10 );
+  scene.add( axesHelper );
+
+}
+
+
+export { createMeshes , createGridHelp };
