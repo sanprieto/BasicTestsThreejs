@@ -25,7 +25,7 @@ function init() {
   camera = createCamera( container );
   createOrbitControls( camera, container );
   createLights( scene );
-  createGridHelp( scene )
+  createGridHelp( scene );
   cube = createMeshes( scene );
 
   renderer = createRenderer( container );
