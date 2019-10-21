@@ -9,7 +9,7 @@ import { createPath, drawPath } from '/js/myPaths';
 import { createMusic } from '/js/theMusic';
 
 let stats = new Stats();
-document.body.appendChild( stats.dom );
+//document.body.appendChild( stats.dom );
 
 let camera,container, renderer, scene, path, lines , lines2, axis, tangent, radians, beep, cubes ;
 let up = new THREE.Vector3( 0, 1, 0 );
@@ -72,7 +72,7 @@ function update() {
       lines[i].position.y = beep.analyser.getFrequencyData()[i] * 0.05;
 
     }
-    if(( beep.analyser.getFrequencyData()[i] == 0)||(i > 127)){
+    if(( beep.analyser.getFrequencyData()[i] == 0)||(i > 256)){
 
       lines[i].material.color.setHSL( time + i/200 , 1, 0.4 );
       lines[i].rotation.y -= 0.005;
