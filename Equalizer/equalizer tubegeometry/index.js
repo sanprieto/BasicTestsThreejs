@@ -14,9 +14,9 @@ document.body.appendChild( stats.dom );
 
 let camera,container, renderer, scene, path, lines , lines2, axis, tangent, radians, beep, cubes ;
 let up = new THREE.Vector3( 0, 1, 0 );
-let circumference = .2;
+let circumference = 1;
 let heightY = 20;
-let amount = 128;
+let amount = 16;
 let noise = new SimplexNoise();
 
 const urlData = require('./music/o.mp3');
@@ -34,7 +34,7 @@ function init() {
   container = document.querySelector( '#magic' );
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color( 0xffffff );
+  scene.background = new THREE.Color( 0x82C9D9 );
 
   camera = createCamera( container );
   createOrbitControls( camera, container );
@@ -47,7 +47,7 @@ function init() {
 
     path = new createPath( circumference ,heightY );
     lines = drawPath( path, scene, 0x000000 );
-    circumference = circumference + 0.2;
+    circumference = circumference + 1.3;
 
   }
 
@@ -72,18 +72,18 @@ function update() {
 
     if( beep.analyser.getFrequencyData()[i] >=1 ){
 
-      lines[i].rotation.z = THREE.Math.degToRad( beep.analyser.getFrequencyData()[i]  );
+      //lines[i].rotation.z = THREE.Math.degToRad( beep.analyser.getFrequencyData()[i]  );
       lines[i].position.y = beep.analyser.getFrequencyData()[i] * 0.5;
 
     }
     if(( beep.analyser.getFrequencyData()[i] == 0)||(i > 127)){
 
-      lines[i].material.color.setHSL( time + i/200 , 1, 0.4 );
+      lines[i].material.color.setHSL( 0.57, 0.4, 0.3 );
       
       lines[i].rotation.y -= 0.005;
     }else{
 
-      lines[i].material.color.setHSL( beep.analyser.getFrequencyData()[i]/255 , 1, 0.5 );
+      lines[i].material.color.setHSL( beep.analyser.getFrequencyData()[i]/255 , 0.3, 0.4 );
       
      
             lines[i].rotation.y -= 0.01;

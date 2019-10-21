@@ -25,7 +25,7 @@ function createGeometries() {
 
   }
   starsGeometry.addAttribute( 'position', new THREE.Float32BufferAttribute( positions, 3 ) );
-  starsGeometry.computeBoundingSphere();
+
 
   return starsGeometry;
 

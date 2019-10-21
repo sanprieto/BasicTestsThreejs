@@ -30,7 +30,7 @@ createPath.prototype.getPoint = function ( t ) {
 function drawPath( path, scene, color ) {
 
 
-  var geometry = new THREE.TubeGeometry( path, 80, 1, 18, false );
+  var geometry = new THREE.TubeGeometry( path, 80, 3, 18, false );
   var material = new THREE.MeshPhongMaterial( { side:THREE.DoubleSide  ,color: color } );
   var mesh = new THREE.Mesh( geometry, material );
   scene.add( mesh );

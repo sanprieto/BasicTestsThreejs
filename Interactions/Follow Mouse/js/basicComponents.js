@@ -2,8 +2,8 @@ import * as THREE from 'three';
 
 function createCamera( container ) { 
 
-  const cam = new THREE.PerspectiveCamera( 65, container.clientWidth / container.clientHeight, 0.01, 1000 );
-  cam.position.set( 0,140,100 );
+  const cam = new THREE.PerspectiveCamera( 65, container.clientWidth / container.clientHeight, 0.1, 100 );
+  cam.position.set( 0,2,5 );
 
   return cam;
 
