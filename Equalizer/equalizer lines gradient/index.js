@@ -44,7 +44,7 @@ function init() {
 
     path = new createPath( circumference ,heightY );
     lines = drawPath( path, scene, 0x000000 );
-    circumference = circumference + .08;
+    circumference = circumference + .01;
 
   }
 
@@ -74,11 +74,11 @@ function update() {
     }
     if(( beep.analyser.getFrequencyData()[i] == 0)||(i > 256)){
 
-      lines[i].material.color.setHSL( time + i/200 , 1, 0.4 );
+      lines[i].material.color.setHSL( time + i/200 , 1, 0.5 );
       lines[i].rotation.y -= 0.005;
     }else{
 
-      lines[i].material.color.setHSL( beep.analyser.getFrequencyData()[i]/255 , 1, 0.5 );
+      lines[i].material.color.setHSL( beep.analyser.getFrequencyData()[i]/255 , 1, 0.4 );
       lines[i].rotation.y -= 0.01;
     }
 

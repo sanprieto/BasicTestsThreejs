@@ -12,6 +12,9 @@ function createCamera( container ) {
 function createRenderer( container ) {
 
   const renderer = new THREE.WebGLRenderer( { antialias: true } );
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+  
   renderer.setSize( container.clientWidth, container.clientHeight );
 
   renderer.setPixelRatio( window.devicePixelRatio );

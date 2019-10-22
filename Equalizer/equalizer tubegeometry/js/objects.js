@@ -18,20 +18,22 @@ function createMaterials() {
 
 function createGeometries() {
 
-  const box = new THREE.SphereGeometry(.5);
+  const box = new THREE.BoxGeometry(10,10,10);
 
   return box;
 }
 
 function createMeshes( scene ) {
 
-  for ( var o = 0; o < 1; o++ ) {
+  for ( var o = 0; o < 10; o++ ) {
 
       const materials = createMaterials();
       const geometries = createGeometries();
 
       let obj = new THREE.Mesh( geometries, materials );
-      obj.rotation.y = Math.random()
+      obj.castShadow = true;
+      obj.receiveShadow = true;
+      obj.position.x -= o +10
       scene.add( obj );
       objects.push(obj)
     }
@@ -46,10 +48,20 @@ function createGridHelp( scene ){
   const divisions = 60;
 
   const gridHelper = new THREE.GridHelper( size, divisions );
-  scene.add( gridHelper );
+  //scene.add( gridHelper );
 
   const axesHelper = new THREE.AxesHelper( 10 );
-  scene.add( axesHelper );
+  //scene.add( axesHelper );
+
+  var geometry = new THREE.PlaneGeometry( 860, 860, 32 );
+  var material = new THREE.MeshPhongMaterial( {color: 0x6699FF, side: THREE.DoubleSide} );
+  var plane = new THREE.Mesh( geometry, material );
+  plane.rotation.x = THREE.Math.degToRad(90);
+  plane.position.y = -4;
+  plane.receiveShadow = true;
+
+  scene.add( plane )
+
 
 }
 

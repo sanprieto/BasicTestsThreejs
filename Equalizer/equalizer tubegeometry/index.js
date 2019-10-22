@@ -20,12 +20,10 @@ let amount = 16;
 let noise = new SimplexNoise();
 
 const urlData = require('./music/o.mp3');
-//const urlData = require('./music/engine.mp3');
 
 document.getElementById('overlay').addEventListener('click', function() {
   this.style.display = "none";
   beep.sound.play();
-
 
 });
 
@@ -39,15 +37,16 @@ function init() {
   camera = createCamera( container );
   createOrbitControls( camera, container );
   createLights( scene );
-  //createGridHelp( scene )
+  createGridHelp( scene )
+  //createMeshes( scene )
 
   beep = createMusic( camera, urlData );
-  
+
   for ( let o = 0; o < amount ; o++ ) {
 
     path = new createPath( circumference ,heightY );
     lines = drawPath( path, scene, 0x000000 );
-    circumference = circumference + 1.3;
+    circumference = circumference + .8;
 
   }
 
@@ -66,7 +65,6 @@ function update() {
   stats.update();
 
   const time = ( (0.001 * performance.now())/15 ) % 15;
-  
 
   for (let i = 0; i < amount ; i++) {
 
@@ -86,12 +84,12 @@ function update() {
       lines[i].material.color.setHSL( beep.analyser.getFrequencyData()[i]/255 , 0.3, 0.4 );
       
      
-            lines[i].rotation.y -= 0.01;
+      lines[i].rotation.y -= 0.01;
     }
 
   }
   
-  
+
 
 }
 

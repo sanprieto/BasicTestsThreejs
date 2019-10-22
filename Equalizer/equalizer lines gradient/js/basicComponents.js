@@ -3,7 +3,7 @@ import * as THREE from 'three';
 function createCamera( container ) { 
 
   const cam = new THREE.PerspectiveCamera( 65, container.clientWidth / container.clientHeight, 0.01, 1000 );
-  cam.position.set( 0,-85,50 );
+  cam.position.set( 0,-35,30 );
 
   return cam;
 

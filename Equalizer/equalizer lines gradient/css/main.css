@@ -24,18 +24,20 @@ body {
 #overlay > div {
 	text-align: center;
 }
-#overlay > div > button {
-	height: 20px;
-	width: 100px;
+#overlay > div > p > button {
+
 	background: transparent;
 	color: black;
-	outline: 1px solid black;
+
 	border: 0px;
 	cursor: pointer;
-	background: white;
+
+	font-size: 224px;
+
 
 }
-#overlay > div > p {
-	color: #777777;
-	font-size: 14px;
+#overlay p {
+	width: 600px;
+	margin: auto;
 }
+

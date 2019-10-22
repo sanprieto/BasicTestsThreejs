@@ -27,27 +27,16 @@ createPath.prototype.getPoint = function ( t ) {
 
 };
 
-function drawPath( path, scene, color ) {
-
+function drawPath( path, scene, color, o ) {
 
   var geometry = new THREE.TubeGeometry( path, 80, 3, 18, false );
   var material = new THREE.MeshPhongMaterial( { side:THREE.DoubleSide  ,color: color } );
   var mesh = new THREE.Mesh( geometry, material );
+  mesh.castShadow = true; //default is false
+  mesh.receiveShadow = false; //default
   scene.add( mesh );
   lineas.push( mesh )
 
-  /*
-
-  const vertices = path.getSpacedPoints( 100 ) ;
-  const lineGeometry = new THREE.Geometry();
-  lineGeometry.vertices = vertices;
-  const lineMaterial = new THREE.LineBasicMaterial({
-    color: color
-  });
-  const line = new THREE.Line( lineGeometry, lineMaterial)
-  scene.add(line);
-  lineas.push( line )
-  */
 
   return lineas;
 }
