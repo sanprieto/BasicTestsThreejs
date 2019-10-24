@@ -13,6 +13,9 @@ function createRenderer( container ) {
 
   const renderer = new THREE.WebGLRenderer( { antialias: true } );
   renderer.setSize( container.clientWidth, container.clientHeight );
+
+  //renderer.autoClearColor = false;
+
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
 
@@ -24,6 +27,7 @@ function createRenderer( container ) {
   renderer.physicallyCorrectLights = true;
 
   container.appendChild( renderer.domElement );
+
 
   return renderer;
 
