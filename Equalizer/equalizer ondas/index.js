@@ -10,7 +10,7 @@ import { createMusic } from '/js/theMusic';
 var SimplexNoise = require('simplex-noise');
 
 let stats = new Stats();
-document.body.appendChild( stats.dom );
+//document.body.appendChild( stats.dom );
 
 let camera,container, renderer, scene, path, lines , beep, cubes, sphere, amp, particles, mesh ;
 let up = new THREE.Vector3( 0, 1, 0 );
@@ -82,7 +82,7 @@ function update() {
             if( average > 60 ){ 
               amp = frequency[i] * 0.005;
             }else{
-              amp = frequency[i] * 0.01;
+              amp = frequency[i] * 0.025;
             }
           }else{
             amp = frequency[i]* 0.035;
@@ -105,7 +105,7 @@ function update() {
         vertex.multiplyScalar(distance);
      });
 
-      if( average > 65 ){
+      if( average > 60 ){
 
         if( i > amount/2 ){
           
@@ -119,7 +119,7 @@ function update() {
 
         lines[i].material.color.setHSL( 0.48 , 0.8, 0.5 );
         
-      }else if(( average > 30 )&&(( i >= 0)&&( i<= amount/2))){
+      }else if(( average > 25 )&&(( i >= 0)&&( i<= amount/2))){
 
         lines[i].rotation.z +=  0.009;
         lines[i].material.color.setHSL( 0.18 ,0.7 , 0.5 );
@@ -128,14 +128,14 @@ function update() {
       lines[i].rotation.z +=  0.003;
       
       if( frequency[1]==255){
-          lines[i].rotation.z +=  0.02;
+          lines[i].rotation.z +=  0.043;
       }
 
-      if( lines[0].scale.x <= 0 ){ }else{
+      if( lines[0].scale.x <= 0.3 ){ }else{
 
-       lines[i].scale.x -= frequency[i] * 0.00003;
-       lines[i].scale.y -= frequency[i] * 0.00003;
-       lines[i].scale.z -= frequency[i] * 0.00003;
+       lines[i].scale.x -= frequency[i] * 0.00002;
+       lines[i].scale.y -= frequency[i] * 0.00002;
+       lines[i].scale.z -= frequency[i] * 0.00002;
 
       }
 
