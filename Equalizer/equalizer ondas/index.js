@@ -12,39 +12,13 @@ var SimplexNoise = require('simplex-noise');
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera,container, renderer, scene, path, lines , lines2, axis, tangent, radians, beep, cubes ;
+let camera,container, renderer, scene, path, lines , beep, cubes, sphere, amp, particles, mesh ;
 let up = new THREE.Vector3( 0, 1, 0 );
 let circumference = 1;
 let heightY = 1;
 let amount = 64;
 let noise = new SimplexNoise();
-let mesh;
-let sphere;
-let amp;
-let particles;
 let objects =[];
-
-function createMaterials() {
-
-  const mat = new THREE.MeshPhongMaterial( {
-    color: 0x6699FF,
-    side:THREE.DoubleSide
-
-  } );
-
-  mat.color.convertSRGBToLinear();
-
-  return mat;
-
-}
-
-function createGeometries() {
-
-  const box = new THREE.BoxBufferGeometry();
-  box.translate( 0, 0.5, 0 );
-
-  return box;
-}
 
 const urlData = require('./music/o.mp3');
 
@@ -64,32 +38,15 @@ function init() {
   camera = createCamera( container );
   createOrbitControls( camera, container );
   createLights( scene );
-  //createGridHelp( scene )
-  //mesh = createMeshes( scene )
   particles  = createMeshes( scene );
 
-
   beep = createMusic( camera, urlData );
-  console.log( beep );
+
   for ( let o = 0; o < amount ; o++ ) {
 
     path = new createPath( circumference ,heightY );
     lines = drawPath( path, scene, 0xeef120 );
-    circumference = circumference + .9;
-
-  }
-  console.log(lines[0].geometry.vertices)
-
-  for ( var i = 0; i < 32; i ++ ) {
-
-    const materials = createMaterials();
-    const geometries = createGeometries();
-
-    let obj = new THREE.Mesh( geometries, materials );
-    obj.position.x = i-8;
-    obj.position.y = -5;
-    //scene.add( obj );
-    objects.push(obj)
+    circumference = circumference + 4.9;
 
   }
 
@@ -105,75 +62,97 @@ function init() {
 }
 
 function update() {
+
   stats.update();
 
+  const average = beep.analyser.getAverageFrequency();
+  const frequency = beep.analyser.getFrequencyData();
   const theTime = ( 0.0001 * performance.now() ) % 15;
+  
+  particles [0].rotation.z = .00005 * performance.now();
 
+  for (let i = 0; i< amount ; i++) {
 
+    lines[i].geometry.vertices.forEach(function( vertex, eo ) {
 
-    particles [0].rotation.z = .00005 * performance.now();
+        if(( eo >= 10 )&&( eo <= 70 )){
 
+          if(( i >= 0 )&&( i <= amount/2 )){
 
-
-for (let i = 0; i< amount ; i++) {
-
-  lines[i].geometry.vertices.forEach(function(vertex,eo) {
-
-      let offset = 10 +(i*0.005);
-      if((eo >= 10)&&(eo<=70)){
-
-        if((i >= 0)&&(i<=30)){
-          amp = beep.analyser.getFrequencyData()[i]* 0.01;
+            if( average > 60 ){ 
+              amp = frequency[i] * 0.005;
+            }else{
+              amp = frequency[i] * 0.01;
+            }
+          }else{
+            amp = frequency[i]* 0.035;
+            lines[i].material.color.setHSL( 0.83 , 0.8, 0.5 );
+          }
 
         }else{
-          amp = beep.analyser.getFrequencyData()[i]* 0.03;
-          lines[i].material.color.setHSL( 0.83 , 0.8, 0.5 );
+          amp = 0;
         }
-      }else{
-        amp = 0;
-      }
 
-      let time = Date.now();
-      vertex.normalize();
+        let time = Date.now();
+        vertex.normalize();
+        let offset = 10 +(i*0.005);
 
-      let distance = offset + noise.noise3D(
-          vertex.x  + i + time * 0.0007,
-          vertex.y + i + time * 0.0001,
-          vertex.z + i + time * 0.0001
-      ) * amp;
-      vertex.multiplyScalar(distance);
-   });
-   lines[i].geometry.verticesNeedUpdate = true;
-   lines[i].geometry.normalsNeedUpdate = true;
-   lines[i].geometry.computeVertexNormals();
-   lines[i].geometry.computeFaceNormals();
+        let distance = offset + noise.noise3D(
+            vertex.x + i + time * 0.0007,
+            vertex.y + i + time * 0.0001,
+            vertex.z + i + time * 0.0001
+        ) * amp;
+        vertex.multiplyScalar(distance);
+     });
 
-    if(beep.analyser.getAverageFrequency()>70){
+      if( average > 65 ){
 
-      if((i >= 0)&&(i<=30)){
-        
-        lines[i].material.color.setHSL( beep.analyser.getFrequencyData()[i]/255 ,0.8 , 0.5 );
-        lines[i].rotation.z += beep.analyser.getFrequencyData()[i] * 0.0003 ;
+        if( i > amount/2 ){
+          
+          lines[i].rotation.z += frequency[i] * 0.0002;
 
-      }else{
+        }else{
+
+          lines[i].position.z += 0.001;
+       
+        }
 
         lines[i].material.color.setHSL( 0.48 , 0.8, 0.5 );
-        lines[i].rotation.z += beep.analyser.getAverageFrequency() * 0.0001 ;
+        
+      }else if(( average > 30 )&&(( i >= 0)&&( i<= amount/2))){
+
+        lines[i].rotation.z +=  0.009;
+        lines[i].material.color.setHSL( 0.18 ,0.7 , 0.5 );
+
       }
+      lines[i].rotation.z +=  0.003;
       
-      lines[i].rotation.x +=  beep.analyser.getFrequencyData()[i] * 0.000002;
-      
-    }else if(beep.analyser.getAverageFrequency()>30){
+      if( frequency[1]==255){
+          lines[i].rotation.z +=  0.02;
+      }
 
+      if( lines[0].scale.x <= 0 ){ }else{
 
-      lines[i].rotation.z += beep.analyser.getAverageFrequency() * 0.0005 ;
+       lines[i].scale.x -= frequency[i] * 0.00003;
+       lines[i].scale.y -= frequency[i] * 0.00003;
+       lines[i].scale.z -= frequency[i] * 0.00003;
 
-    }else{
-      lines[i].rotation.z +=  0.009;
-      lines[i].rotation.x -=  beep.analyser.getFrequencyData()[i] * 0.000001;
-    }
-//lines[i].rotation.z =  0;
+      }
+
+      if(( average >105 )&&(( i > amount/2 ))){
+
+        lines[i].scale.setScalar( 1 );
+        lines[i].material.color.setHSL( 0.18 ,0.7 , 0.9 );
+
+      }else if( average >105 ){
+
+        lines[i].scale.setScalar( 1 );
+        lines[i].material.color.setHSL( 0.18 ,0.7 , 0.5 );
+      }
+
+    lines[i].geometry.verticesNeedUpdate = true;
   }
+
 
 }
 
