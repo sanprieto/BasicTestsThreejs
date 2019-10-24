@@ -25,17 +25,11 @@ body {
 	text-align: center;
 }
 #overlay > div > button {
-	height: 20px;
-	width: 100px;
-	background: transparent;
-	color: black;
-	outline: 1px solid black;
+
 	border: 0px;
 	cursor: pointer;
-	background: white;
+	font-size: 55px;
+
 
 }
-#overlay > div > p {
-	color: #777777;
-	font-size: 14px;
-}
+

@@ -20,7 +20,7 @@ function createMusic( camera, urlData ){
 	});
 
 	// create an AudioAnalyser, passing in the sound and desired fftSize
-	let analyser = new THREE.AudioAnalyser( sound, 32 );
+	let analyser = new THREE.AudioAnalyser( sound, 128 );
 	
 	analyser.smoothingTimeConstant = 1;
 

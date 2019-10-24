@@ -43,7 +43,7 @@ function update() {
     particles [i].rotation.z = .0001 * performance.now() + i ;
     particles [i].rotation.y = .00003 * performance.now() + i ;
     particles [i].rotation.x = .00003 * performance.now() * i ;
-    particles [i].material.color.setHSL(  time + (i*.2) , 0.9, 0.6 );
+    particles [i].material.color.setHSL(  0.48 , 0.9, 0.6 );
 
   }
 

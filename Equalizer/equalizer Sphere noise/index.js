@@ -52,8 +52,8 @@ function init() {
     circumference = circumference + .9;
 
   }
-  var geometry = new THREE.SphereGeometry( 57, 32, 32 );
-  var material = new THREE.MeshBasicMaterial( {color: 0xfbff00} );
+  var geometry = new THREE.SphereGeometry( 56, 32, 32 );
+  var material = new THREE.MeshBasicMaterial( {color: 0xfbff00, transparent: true, opacity:.8} );
   sphere = new THREE.Mesh( geometry, material );
   scene.add( sphere );
   console.log( mesh.position, sphere.position );
@@ -88,61 +88,31 @@ const time = ( 0.001 * performance.now()%10) / 10;
       ) * amp;
       vertex.multiplyScalar(distance);
    })
-   
-
   
-          mesh.rotation.y += beep.analyser.getFrequencyData()[6] * 0.0005 ;
+    mesh.rotation.y += beep.analyser.getFrequencyData()[6] * 0.0005 ;
 
-          if((time>0.46) && (time<0.8)){
+    if((time>0.46) && (time<0.8)){
 
-            mesh.material.color.setHSL( time , 0.9, 0.5 );
+      mesh.material.color.setHSL( time , 0.9, 0.5 );
 
-          }else{
+    }else{
            
-            mesh.material.color.setHSL(  0.8 , 0.9, 0.5 );
-          }
-          if(beep.analyser.getFrequencyData()[12]<10){
-            sphere.scale.setScalar( 1 );
+      mesh.material.color.setHSL(  0.8 , 0.9, 0.5 );
+    }
+    if(beep.analyser.getFrequencyData()[12]<10){
+      sphere.scale.setScalar( 1 );
            
-          }else{
+    }else{
 
      
-            sphere.scale.setScalar( beep.analyser.getFrequencyData()[12]*0.009 );
-              //sphere.material.color.setHSL(  0.16 , 0.9, 0.5 );
-          }
+      sphere.scale.setScalar( beep.analyser.getFrequencyData()[12]*0.009 );
+   
+    }
           
-          
-
-          
-
-
-  for (let i = 0; i < 16 ; i++) {
-    //console.log(beep.analyser.getFrequencyData()[i]/255);
-//mesh.material.color.setHSL( beep.analyser.getFrequencyData()[i]/255, 0.8, 0.5 );
-
-    //lines[i].rotation.z = THREE.Math.degToRad( beep.analyser.getFrequencyData()[i]) ;
-
-
-      //lines[i].rotation.z = THREE.Math.degToRad( beep.analyser.getFrequencyData()[i] );
-
-      //lines[i].position.y = beep.analyser.getFrequencyData()[i]*0.1;
-      //lines[i].scale.set(beep.analyser.getFrequencyData()[i]/255,beep.analyser.getFrequencyData()[i]/255,beep.analyser.getFrequencyData()[i]/255);
-
-
-
-
-      //lines[i].material.color.setHSL( time, 0.8, 0.5 );
-      
-
-
-
-  }
-  
-
-            mesh.geometry.verticesNeedUpdate = true;
-          mesh.geometry.normalsNeedUpdate = true;
-          mesh.geometry.computeVertexNormals();
-          mesh.geometry.computeFaceNormals();
+    mesh.geometry.verticesNeedUpdate = true;
+    mesh.geometry.normalsNeedUpdate = true;
+    mesh.geometry.computeVertexNormals();
+    mesh.geometry.computeFaceNormals();
 
 
 }
