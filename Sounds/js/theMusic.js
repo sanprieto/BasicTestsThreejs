@@ -27,10 +27,6 @@ function createMusic( camera, urlData ){
 	analyser.analyser.minDecibels = -100; // -100
 	
 
-	// get the average frequency of the sound
-	var data = analyser.getFrequencyData();
-	console.log( 'data', data );
-
 	return analyser;
 
 
