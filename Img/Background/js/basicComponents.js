@@ -15,12 +15,9 @@ function createRenderer( container ) {
   renderer.setSize( container.clientWidth, container.clientHeight );
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
-
   renderer.setPixelRatio( window.devicePixelRatio );
-
   renderer.gammaFactor = 2.2;
   renderer.gammaOutput = true;
-
   renderer.physicallyCorrectLights = true;
 
   container.appendChild( renderer.domElement );

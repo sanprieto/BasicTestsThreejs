@@ -4,7 +4,7 @@ import { createCamera, createRenderer } from '/js/basicComponents';
 import { createOrbitControls } from '/js/sceneControls';
 import { createLights } from '/js/lights';
 import { createMeshes, createGridHelp } from '/js/objects';
-//import { loadImg } from '/js/images.js';
+import { loadImg } from '/js/images.js';
 import Stats from 'stats.js';
 
 const urlData = require('/img/starts.jpg');
@@ -12,7 +12,6 @@ const urlData = require('/img/starts.jpg');
 
 let stats = new Stats();
 document.body.appendChild( stats.dom );
-
 
 let camera, container, renderer, scene, cube, bgTexture;
 
@@ -28,6 +27,7 @@ function init() {
 
   const loader = new THREE.TextureLoader();
   const bgTexture = loader.load(urlData );
+  bgTexture.encoding = THREE.sRGBEncoding
   scene.background = bgTexture;
 
   cube = createMeshes( scene );
