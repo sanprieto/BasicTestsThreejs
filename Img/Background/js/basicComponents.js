@@ -11,7 +11,7 @@ function createCamera( container ) {
 
 function createRenderer( container ) {
 
-  const renderer = new THREE.WebGLRenderer( { antialias: true } );
+  const renderer = new THREE.WebGLRenderer( { antialias: true , alpha: true } );
   renderer.setSize( container.clientWidth, container.clientHeight );
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
@@ -19,6 +19,7 @@ function createRenderer( container ) {
   renderer.gammaFactor = 2.2;
   renderer.gammaOutput = true;
   renderer.physicallyCorrectLights = true;
+  //renderer.autoClearColor = false;
 
   container.appendChild( renderer.domElement );
 

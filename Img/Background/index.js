@@ -4,7 +4,7 @@ import { createCamera, createRenderer } from '/js/basicComponents';
 import { createOrbitControls } from '/js/sceneControls';
 import { createLights } from '/js/lights';
 import { createMeshes, createGridHelp } from '/js/objects';
-import { loadImg } from '/js/images.js';
+import { loadTexture } from '/js/images.js';
 import Stats from 'stats.js';
 
 const urlData = require('/img/starts.jpg');
@@ -26,9 +26,10 @@ function init() {
   createLights( scene );
 
   const loader = new THREE.TextureLoader();
-  const bgTexture = loader.load(urlData );
+  const bgTexture = loader.load( urlData );
   bgTexture.encoding = THREE.sRGBEncoding
   scene.background = bgTexture;
+  console.log( scene, bgTexture.image );
 
   cube = createMeshes( scene );
 
@@ -36,17 +37,31 @@ function init() {
 
   renderer.setAnimationLoop( () => {
 
-    update();
+    update( bgTexture );
     render();
 
   } );
 
 }
 
-function update() {
+function update( bgTexture ) {
   stats.update();
 	cube.rotation.z += 0.03;
 	cube.rotation.x -= 0.01;
+
+    const canvasAspect = container.clientWidth / container.clientHeight;
+    const imageAspect = bgTexture.image ? bgTexture.image.width / bgTexture.image.height : 1;
+    const aspect = imageAspect / canvasAspect;
+    
+    bgTexture.offset.x = aspect > 1 ? (1 - 1 / aspect) / 2 : 0;
+    bgTexture.repeat.x = aspect > 1 ? 1 / aspect : 1;
+    
+    bgTexture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
+    bgTexture.repeat.y = aspect > 1 ? 1 : aspect;
+
+  
+
+  
 
 }
 

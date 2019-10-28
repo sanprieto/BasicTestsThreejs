@@ -14,7 +14,7 @@ function createGeometries() {
   const starsGeometry = new THREE.BufferGeometry();
   var positions = [];
 
-  for ( let i = 0; i < 1500; i ++ ) {
+  for ( let i = 0; i < 5500; i ++ ) {
 
     let star = new THREE.Vector3();
     star.x = THREE.Math.randFloatSpread( 120 );

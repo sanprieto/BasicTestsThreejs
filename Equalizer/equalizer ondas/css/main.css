@@ -29,7 +29,20 @@ body {
 	border: 0px;
 	cursor: pointer;
 	font-size: 125px;
+	color:white;
+	background: transparent;
 
 
+}
+#about{
+	position: absolute;
+    bottom: 0;
+}
+h1{
+    border: 1px solid white;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 100;
+    font-family: sans-serif;
 }
 
