@@ -4,70 +4,63 @@ import { createCamera, createRenderer } from '/js/basicComponents';
 import { createOrbitControls } from '/js/sceneControls';
 import { createLights } from '/js/lights';
 import { createMeshes, createGridHelp } from '/js/objects';
-import { loadTexture } from '/js/images.js';
 import Stats from 'stats.js';
-
-const urlData = require('/img/starts.jpg');
-
 
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera, container, renderer, scene, cube, bgTexture;
+let camera, container, renderer, scene, cube;
+let mouseX = 0, mouseY = 0;
+
+let windowHalfX = window.innerWidth / 2;
+let windowHalfY = window.innerHeight / 2;
 
 function init() {
 
   container = document.querySelector( '#magic' );
 
   scene = new THREE.Scene();
-  
+  scene.background = new THREE.Color( 0xffffff );
+
   camera = createCamera( container );
-  createOrbitControls( camera, container );
+  //createOrbitControls( camera, container );
   createLights( scene );
-
-  const loader = new THREE.TextureLoader();
-  bgTexture = loader.load( urlData );
-  bgTexture.encoding = THREE.sRGBEncoding
-  scene.background = bgTexture;
-
-
+  createGridHelp( scene );
   cube = createMeshes( scene );
 
   renderer = createRenderer( container );
 
   renderer.setAnimationLoop( () => {
 
-    update( bgTexture );
+    update();
     render();
 
   } );
 
 }
 
-function update( bgTexture ) {
+function update() {
+
   stats.update();
 	cube.rotation.z += 0.03;
 	cube.rotation.x -= 0.01;
 
-    const canvasAspect = container.clientWidth / container.clientHeight;
-    const imageAspect = bgTexture.image ? bgTexture.image.width / bgTexture.image.height : 1;
-    const aspect = imageAspect / canvasAspect;
-    
-    bgTexture.offset.x = aspect > 1 ? (1 - 1 / aspect) / 2 : 0;
-    bgTexture.repeat.x = aspect > 1 ? 1 / aspect : 1;
-    
-    bgTexture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
-    bgTexture.repeat.y = aspect > 1 ? 1 : aspect;
-
-  
-
-  
+  camera.position.x += ( mouseX - camera.position.x )   * .05;
+  camera.position.y += ( - mouseY - camera.position.y ) * .05;
+  camera.lookAt( scene.position );
 
 }
 
 function render() {
 
   renderer.render( scene, camera );
+
+}
+
+function onDocumentMouseMove( event ) {
+
+  mouseX = ( event.clientX - windowHalfX ) /180;
+  mouseY = ( event.clientY - windowHalfY ) /620;
 
 }
 
@@ -80,6 +73,8 @@ function onWindowResize() {
 }
 
 window.addEventListener( 'resize', onWindowResize );
+document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
 
 init();
 
