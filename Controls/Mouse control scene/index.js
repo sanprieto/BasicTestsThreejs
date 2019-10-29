@@ -11,7 +11,6 @@ document.body.appendChild( stats.dom );
 
 let camera, container, renderer, scene, cube;
 let mouseX = 0, mouseY = 0;
-
 let windowHalfX = window.innerWidth / 2;
 let windowHalfY = window.innerHeight / 2;
 
@@ -73,8 +72,6 @@ function onWindowResize() {
 }
 
 window.addEventListener( 'resize', onWindowResize );
-document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-
+document.addEventListener( 'mousemove', onDocumentMouseMove );
 
 init();
-

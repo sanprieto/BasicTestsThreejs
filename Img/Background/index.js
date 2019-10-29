@@ -8,12 +8,12 @@ import { loadTexture } from '/js/images.js';
 import Stats from 'stats.js';
 
 const urlData = require('/img/starts.jpg');
-
+const urlData2 = require('/img/brujula.jpg');
 
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera, container, renderer, scene, cube, bgTexture;
+let camera, container, renderer, scene, cube, bgTexture, imgOne;
 
 function init() {
 
@@ -30,8 +30,9 @@ function init() {
   bgTexture.encoding = THREE.sRGBEncoding
   scene.background = bgTexture;
 
+  imgOne = loadTexture( scene, urlData2 );
 
-  cube = createMeshes( scene );
+  //cube = createMeshes( scene );
 
   renderer = createRenderer( container );
 
@@ -46,22 +47,16 @@ function init() {
 
 function update( bgTexture ) {
   stats.update();
-	cube.rotation.z += 0.03;
-	cube.rotation.x -= 0.01;
 
-    const canvasAspect = container.clientWidth / container.clientHeight;
-    const imageAspect = bgTexture.image ? bgTexture.image.width / bgTexture.image.height : 1;
-    const aspect = imageAspect / canvasAspect;
+  const canvasAspect = container.clientWidth / container.clientHeight;
+  const imageAspect = bgTexture.image ? bgTexture.image.width / bgTexture.image.height : 1;
+  const aspect = imageAspect / canvasAspect;
     
-    bgTexture.offset.x = aspect > 1 ? (1 - 1 / aspect) / 2 : 0;
-    bgTexture.repeat.x = aspect > 1 ? 1 / aspect : 1;
+  bgTexture.offset.x = aspect > 1 ? (1 - 1 / aspect) / 2 : 0;
+  bgTexture.repeat.x = aspect > 1 ? 1 / aspect : 1;
     
-    bgTexture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
-    bgTexture.repeat.y = aspect > 1 ? 1 : aspect;
-
-  
-
-  
+  bgTexture.offset.y = aspect > 1 ? 0 : (1 - aspect) / 2;
+  bgTexture.repeat.y = aspect > 1 ? 1 : aspect;
 
 }
 

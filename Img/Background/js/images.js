@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 
-function loadTexture( scene, urlImg, type ){
+function loadTexture( scene, urlImg ){
 
     // instantiate a loader
     var loader = new THREE.TextureLoader();
@@ -14,14 +14,18 @@ function loadTexture( scene, urlImg, type ){
         function ( texture ) {
             // in this example we create the material when the texture is loaded
 
-            if(type == 0){
+            texture.encoding = THREE.sRGBEncoding;
+            const material = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
+            const geometry = new THREE.PlaneGeometry( 40, 40, 32 );
+            const plane = new THREE.Mesh( geometry, material );
+            const proporcion = texture.image.width / texture.image.height;
+            plane.scale.x = 1;
+            plane.scale.y = 1/ proporcion ;
 
-            	texture.encoding = THREE.sRGBEncoding;
-            	scene.background = texture;
-            	console.log( 'load', texture.image.width);
+            scene.add( plane );
 
-            	return texture;
-            }
+            return plane;
+            
         },
 
         // onProgress callback currently not supported
