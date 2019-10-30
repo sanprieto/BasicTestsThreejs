@@ -11,7 +11,7 @@ const urlData = require('./textures/bayer.png');
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera, container, renderer, scene, cube, uniforms, materialX, fragmentShader, vertexShader;
+let camera, container, renderer, scene, plane, uniforms, materialX, fragmentShader, vertexShader;
 
 function init() {
 
@@ -23,7 +23,7 @@ function init() {
   camera = createCamera( container );
   createOrbitControls( camera, container );
   createLights( scene );
-  createGridHelp( scene );
+  //createGridHelp( scene );
 
   const loader = new THREE.TextureLoader();
   const texture = loader.load( urlData );
@@ -33,67 +33,110 @@ function init() {
   texture.wrapT = THREE.RepeatWrapping;
 
 
-  var geometry = new THREE.BoxGeometry( 3,3,3);
+  var geometry = new THREE.PlaneGeometry( 30,20,1,1);
 
   fragmentShader = `
   #include <common>
 
-  uniform vec3 iResolution;
-  uniform float iTime;
-  uniform sampler2D iChannel0;
+    uniform vec3 iResolution;
+    uniform float iTime;
 
-  // By Daedelus: https://www.shadertoy.com/user/Daedelus
-  // license: Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
-  #define TIMESCALE 0.25 
-  #define TILES 2
-  #define COLOR 0.7, 1.6, 2.8
+    //********                ***********
 
-  void mainImage( out vec4 fragColor, in vec2 fragCoord )
-  {
-    vec2 uv = fragCoord.xy / iResolution.xy;
-    uv.x *= iResolution.x / iResolution.y;
-    
-    vec4 noise = texture2D(iChannel0, floor(uv * float(TILES)) / float(TILES));
-    float p = 1.0 - mod(noise.r + noise.g + noise.b + iTime * float(TIMESCALE), 1.0);
-    p = min(max(p * 3.0 - 1.8, 0.1), 2.0);
-    
-    vec2 r = mod(uv * float(TILES), 1.0);
-    r = vec2(pow(r.x - 0.5, 2.0), pow(r.y - 0.5, 2.0));
-    p *= 1.0 - pow(min(1.0, 12.0 * dot(r, r)), 2.0);
-    
-    fragColor = vec4(COLOR, 1.0) * p;
-  }
+    #define RM_FACTOR   0.9
+    #define RM_ITERS     90
 
-  varying vec2 vUv;
+    float plasma(vec3 r) {
+      float mx = r.x + iTime / 0.130;
+      mx += 20.0 * sin((r.y + mx) / 20.0 + iTime / 0.810);
+      float my = r.y - iTime / 0.200;
+      my += 30.0 * cos(r.x / 23.0 + iTime / 0.710);
+      return r.z - (sin(mx / 7.0) * 2.25 + sin(my / 3.0) * 2.25 + 5.5);
+    }
 
-  void main() {
-    mainImage(gl_FragColor, vUv * iResolution.xy);
-  }
-  `;
-  vertexShader = `
-    varying vec2 vUv;
+    float scene(vec3 r) {
+      return plasma(r);
+    }
+
+    float raymarch(vec3 pos, vec3 dir) {
+      float dist = 0.0;
+      float dscene;
+
+      for (int i = 0; i < RM_ITERS; i++) {
+        dscene = scene(pos + dist * dir);
+        if (abs(dscene) < 0.1)
+          break;
+        dist += RM_FACTOR * dscene;
+      }
+
+      return dist;
+    }
+
+    void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+      float c, s;
+      float vfov = 3.14159 / 2.3;
+
+      vec3 cam = vec3(0.0, 0.0, 30.0);
+
+      vec2 uv = (fragCoord.xy / iResolution.xy) - 0.5;
+      uv.x *= iResolution.x / iResolution.y;
+      uv.y *= -1.0;
+
+      vec3 dir = vec3(0.0, 0.0, -1.0);
+
+      float xrot = vfov * length(uv);
+
+      c = cos(xrot);
+      s = sin(xrot);
+      dir = mat3(1.0, 0.0, 0.0,
+                 0.0,   c,  -s,
+                 0.0,   s,   c) * dir;
+
+      c = normalize(uv).x;
+      s = normalize(uv).y;
+      dir = mat3(  c,  -s, 0.0,
+                   s,   c, 0.0,
+                 0.0, 0.0, 1.0) * dir;
+
+      c = cos(0.7);
+      s = sin(0.7);
+      dir = mat3(  c, 0.0,   s,
+                 0.0, 1.0, 0.0,
+                  -s, 0.0,   c) * dir;
+
+      float dist = raymarch(cam, dir);
+      vec3 pos = cam + dist * dir;
+
+      fragColor.rgb = mix(
+        vec3(0.4, 0.8, 1.0),
+        mix(
+          vec3(0.0, 0.0, 1.0),
+          vec3(1.0, 1.0, 1.0),
+          pos.z / 10.0
+        ),
+        1.0 / (dist / 20.0)
+      );
+    }
+
+    //*********                **********
+
     void main() {
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+      mainImage(gl_FragColor, gl_FragCoord.xy);
     }
   `;
-
     uniforms = {
       iTime: { value: 0 },
       iResolution:  { value: new THREE.Vector3(1, 1, 1) },
-      iChannel0: { value: texture },
+
     };
     materialX = new THREE.ShaderMaterial({
-      vertexShader,
+
       fragmentShader,
       uniforms,
     });
 
-  cube = new THREE.Mesh( geometry, materialX );
-  scene.add( cube );
-
-  cube.position.y = 2;
-
+  plane = new THREE.Mesh( geometry, materialX );
+  scene.add( plane );
 
   renderer = createRenderer( container );
 
@@ -110,8 +153,7 @@ function update() {
 
   const time = 0.001 * performance.now();
   stats.update();
-	cube.rotation.y += 0.01;
-  cube.rotation.x += 0.01;
+  uniforms.iResolution.value.set( container.clientWidth, container.clientHeight, 1);
   uniforms.iTime.value = time;
 
 }
