@@ -37,7 +37,6 @@ function createGeometries() {
 function createMeshes( scene, u, g ) {
 
   const materials = createMaterials(u);
-  //const geometries = createGeometries();
 
   const obj = new THREE.Mesh( g, materials );
   scene.add( obj );
