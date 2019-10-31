@@ -52,7 +52,7 @@ function createGridHelp( scene ){
   plane.position.y = -.8;
   plane.receiveShadow = true;
 
-  return plane;
+  scene.add( plane );
 
 }
 
