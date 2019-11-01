@@ -30,21 +30,13 @@ function init() {
   createOrbitControls( camera, container );
   createLights( scene );
 
-  //particles  = createParticles( scene, imgTwo, 100, 10,10,10, .5 , .9, .5, 2);
   particles  = createParticles( scene, imgTwo, 1, 1,1,10, .8 , .9, .5, .001);
-  particles[0].position.z =45;
 
   particles  = createParticles( scene, imgTwo, 10000, 200,200,200, .8 , .9, 0.99, 1);
 
   particles  = createParticles( scene, imgTwo, 10000, 200,200,200, .5 , .9, .5, 1);
 
   particles  = createParticles( scene, imgTwo, 1, 4,1,1, .5 , .9, .5, .001);
-  particles[3].position.z =45;
-
-
-
-
-  console.log( particles );
 
   renderer = createRenderer( container );
 
@@ -77,8 +69,6 @@ function update() {
   attributes2.size.needsUpdate = true;
 
   particles[0].rotation.y = time * -0.02;
-  particles[0].rotation.x = time * 0.008;
-  particles[0].rotation.z = time * 0.01;
 
   particles[1].rotation.y = time * -0.015;
   particles[1].rotation.x = time * 0.0055;
@@ -103,28 +93,11 @@ function onWindowResize() {
 window.addEventListener( 'resize', onWindowResize );
 
 
-var manager = new THREE.LoadingManager();
-manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
+let manager = new THREE.LoadingManager();
 
-  console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-
-};
 manager.onLoad = function ( ) {
   init();
 };
-
-manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
-
-  console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-
-};
-
-manager.onError = function ( url ) {
-
-  console.log( 'There was an error loading ' + url );
-
-};
-
 
 let loader = new THREE.TextureLoader(manager);
 loader.load( urlData, function ( texture ) {
@@ -145,5 +118,3 @@ loader3.load( urlData3, function ( texture3 ) {
     imgThree = texture3;
 
 } );
-
-
