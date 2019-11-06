@@ -6,10 +6,12 @@ import { createLights } from '/js/lights';
 import { createMeshes, createGridHelp } from '/js/objects';
 import Stats from 'stats.js';
 
+const urlData = require('/img/brujula.jpg');
+
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera, container, renderer, scene, cube;
+let camera, container, renderer, scene, cube, imgOne ;
 
 function init() {
 
@@ -22,7 +24,8 @@ function init() {
   createOrbitControls( camera, container );
   createLights( scene );
   createGridHelp( scene );
-  cube = createMeshes( scene );
+
+  cube = createMeshes( scene, imgOne );
 
   renderer = createRenderer( container );
 
@@ -57,5 +60,33 @@ function onWindowResize() {
 
 window.addEventListener( 'resize', onWindowResize );
 
-init();
+var manager = new THREE.LoadingManager();
+manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
 
+  console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+
+};
+manager.onLoad = function ( ) {
+  init();
+};
+
+manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
+
+  console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
+
+};
+
+manager.onError = function ( url ) {
+
+  console.log( 'There was an error loading ' + url );
+
+};
+
+let loader = new THREE.TextureLoader(manager);
+loader.load( urlData, function ( texture ) {
+    texture.encoding = THREE.sRGBEncoding;
+    imgOne = new THREE.MeshBasicMaterial( {
+      map: texture
+     } );
+
+} );

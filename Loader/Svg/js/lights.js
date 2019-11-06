@@ -23,7 +23,7 @@ function createLights( scene ) {
 	dirLight.shadow.camera.far = 3500;
 	dirLight.shadow.bias = - 0.0001;
 
-	scene.add( dirLight );
+	scene.add( ambientLight, dirLight );
 
 	var helper = new THREE.CameraHelper( dirLight.shadow.camera );
 	scene.add( helper )

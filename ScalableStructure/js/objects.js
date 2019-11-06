@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 
-function createMaterials() {
+function createMaterials(  ) {
 
   const mat = new THREE.MeshPhongMaterial( {
-    color: 0x6699FF,
+    map: img,
     side:THREE.DoubleSide
 
   } );
@@ -21,11 +21,10 @@ function createGeometries() {
   return box;
 }
 
-function createMeshes( scene ) {
-
-  const materials = createMaterials();
+function createMeshes( scene, img ) {
+  //const materials = createMaterials(img);
   const geometries = createGeometries();
-  const obj = new THREE.Mesh( geometries, materials );
+  const obj = new THREE.Mesh( geometries, img );
   obj.castShadow = true;
   obj.receiveShadow = true;
   scene.add( obj );
@@ -46,7 +45,11 @@ function createGridHelp( scene ){
   scene.add( axesHelper );
 
   const geometry = new THREE.PlaneGeometry( 860, 860, 32 );
-  const material = new THREE.MeshPhongMaterial( {color: 0x6699FF, side: THREE.DoubleSide} );
+  const color = new THREE.Color( 0x6699FF );
+
+  color.convertSRGBToLinear();
+
+  const material = new THREE.MeshPhongMaterial( {color: color , side: THREE.DoubleSide} );
   const plane = new THREE.Mesh( geometry, material );
   plane.rotation.x = THREE.Math.degToRad(90);
   plane.position.y = -.8;
