@@ -4,7 +4,7 @@ function createLights( scene ) {
 
 	const ambientLight = new THREE.HemisphereLight( 0xD3E7FC, 0x0f0e0d, .5 );
 
-	const dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
+	const dirLight = new THREE.DirectionalLight( 0xffffff, 4 );
 	dirLight.castShadow = true; 
 
 	dirLight.shadow.mapSize.width = 4096;
