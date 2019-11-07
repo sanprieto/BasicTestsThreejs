@@ -9,15 +9,21 @@ function wavesBuffer( objects, waveSize, magnitude ){
 
   var x, y, z, index;
   x = y = z = index = 0;
-	let center = new THREE.Vector2(0,0);
+
+  let center = new THREE.Vector2(0,0);
+
   for ( var i = 0, l = objects[0].geometry.attributes.position.array.length; i < l; i ++ ) {
 
 	
 	var dist = new THREE.Vector2(x, y).sub(center);
 
-    positions[ index ++ ] = dist.x;
-    positions[ index ++ ] = dist.v;
-    positions[ index ++ ] = Math.sin( dist.length()/- waveSize + (theTime)) * magnitude;;
+    positions[ index ++ ] = x;
+    positions[ index ++ ] = y;
+    positions[ index ++ ] = z;
+
+    x += dist.x;
+    y += dist.v;
+    z += Math.sin( dist.length()/- waveSize + (theTime)) * magnitude;
 
   }
 

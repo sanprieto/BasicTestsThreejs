@@ -5,13 +5,15 @@ import { createOrbitControls } from '/js/sceneControls';
 import { createLights } from '/js/lights';
 import { createMeshes, createGridHelp } from '/js/objects';
 import Stats from 'stats.js';
+import { createImg } from '/js/images.js';
 
-const urlData = require('/img/brujula.jpg');
+const urlData = require('/img/starts.jpg');
+const urlData2 = require('/img/brujula.jpg');
 
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera, container, renderer, scene, cube, imgOne ;
+let camera, container, renderer, scene, cube, imgOne, imgTwo ;
 
 function init() {
 
@@ -26,6 +28,7 @@ function init() {
   createGridHelp( scene );
 
   cube = createMeshes( scene, imgOne );
+  createImg( scene,0,-4,-11, imgTwo, .2);
 
   renderer = createRenderer( container );
 
@@ -88,5 +91,11 @@ loader.load( urlData, function ( texture ) {
     imgOne = new THREE.MeshBasicMaterial( {
       map: texture
      } );
+
+} );
+let loader2 = new THREE.TextureLoader( manager);
+loader2.load( urlData2, function ( texture2 ) {
+    texture2.encoding = THREE.sRGBEncoding
+    imgTwo = texture2;
 
 } );

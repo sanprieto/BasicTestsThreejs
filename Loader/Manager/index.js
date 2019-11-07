@@ -6,6 +6,7 @@ import { createLights } from '/js/lights';
 import { createMeshes, createGridHelp } from '/js/objects';
 import { LoadingManager } from '/js/loadingManager';
 import Stats from 'stats.js';
+import { createImg } from '/js/images.js';
 
 const urlData = require('/img/starts.jpg');
 const urlData2 = require('/img/brujula.jpg');
@@ -21,18 +22,13 @@ function init() {
   container = document.querySelector( '#magic' );
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color( 0xffffff );
-
+  scene.background = imgOne;
   camera = createCamera( container );
   createOrbitControls( camera, container );
   createLights( scene );
+  createImg( scene,0,-4,-11, imgTwo, .5);
 
-  cube = createMeshes( scene );
-  cube.material = imgOne;
-  console.log( imgOne.map.image.width );
-  plane = createGridHelp( scene );
-  plane.material = imgTwo;
-  console.log( imgTwo.map.image.height );
+  //cube = createMeshes( scene );
 
   renderer = createRenderer( container );
 
@@ -47,8 +43,6 @@ function init() {
 
 function update() {
   stats.update();
-	cube.rotation.z += 0.03;
-	cube.rotation.x -= 0.01;
 }
 
 function render() {
@@ -91,19 +85,16 @@ manager.onError = function ( url ) {
 
 
 let loader = new THREE.TextureLoader(manager);
-loader.load( urlData2, function ( texture ) {
-
-    imgOne = new THREE.MeshBasicMaterial( {
-      map: texture
-     } );
+loader.load( urlData, function ( texture ) {
+    texture.encoding = THREE.sRGBEncoding
+    imgOne = texture;
 
 } );
 
-let loader2 = new THREE.TextureLoader(manager);
-loader2.load( urlData, function ( texture ) {
-
-    imgTwo = new THREE.MeshBasicMaterial( {
-      map: texture
-     } );
+let loader2 = new THREE.TextureLoader( manager);
+loader2.load( urlData2, function ( texture2 ) {
+    texture2.encoding = THREE.sRGBEncoding
+    imgTwo = texture2;
 
 } );
+

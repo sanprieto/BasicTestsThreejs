@@ -1,42 +1,27 @@
 import * as THREE from 'three';
 
 
-function loadTexture( scene, urlImg ){
+function createImg( scene, x, y, z, texture, scale  ){
 
-    // instantiate a loader
-    var loader = new THREE.TextureLoader();
+    console.log( texture );
+    x = typeof x  === 'undefined' ? 0 : x;
+    y = typeof y  === 'undefined' ? 0 : y;
+    z = typeof z  === 'undefined' ? 0 : z;
 
-    // load a resource
-    loader.load(
-        // resource URL
-        urlImg,
-        // onLoad callback
-        function ( texture ) {
-            // in this example we create the material when the texture is loaded
+    scale = typeof scale === 'undefined' ? 1 : scale;
 
-            texture.encoding = THREE.sRGBEncoding;
-            const material = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
-            const geometry = new THREE.PlaneGeometry( 40, 40, 32 );
-            const plane = new THREE.Mesh( geometry, material );
-            const proporcion = texture.image.width / texture.image.height;
-            plane.scale.x = 1;
-            plane.scale.y = 1/ proporcion ;
+    const geometry = new THREE.PlaneBufferGeometry( 40, 40, 180, 180 );
+    const material = new THREE.MeshBasicMaterial( { map: texture, transparent: true, side: THREE.DoubleSide} );
+    const plane = new THREE.Mesh( geometry, material );
+    const proporcion = texture.image.width /  texture.image.height;
+    plane.scale.x = scale;
+    plane.scale.y = scale/ proporcion ;
 
-            scene.add( plane );
+    plane.position.set( x,y,z);
+    scene.add(plane);
 
-            return plane;
-            
-        },
-
-        // onProgress callback currently not supported
-        undefined,
-
-        // onError callback
-        function ( err ) {
-            console.error( 'An error happened.' );
-        }
-    );
+    return plane;
 }
 
 
-export {  loadTexture };
+export {  createImg };
