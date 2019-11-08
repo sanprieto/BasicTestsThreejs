@@ -2,7 +2,6 @@ import * as THREE from 'three';
 
 function createImg( scene, x, y, z, texture, scale  ){
 
-    console.log( texture );
     x = typeof x  === 'undefined' ? 0 : x;
     y = typeof y  === 'undefined' ? 0 : y;
     z = typeof z  === 'undefined' ? 0 : z;

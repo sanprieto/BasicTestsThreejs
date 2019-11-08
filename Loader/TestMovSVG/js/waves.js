@@ -3,37 +3,31 @@ import * as THREE from 'three';
 
 function wavesBuffer( objects, waveSize, magnitude ){
 
-  
-  const theTime =  performance.now() * .001 ;
-  var positions = objects[0].geometry.attributes.position.array;
+    const theTime =  performance.now() * .001;
 
-  var x, y, z, index;
-  x = y = z = index = 0;
+    for ( var o = 0; o < objects.children.length; o++ ) {
 
-  let center = new THREE.Vector2(0,0);
+      var pos = objects.children[o].geometry.attributes.position;
 
-  for ( var i = 0, l = objects[0].geometry.attributes.position.array.length; i < l; i ++ ) {
+      let center = new THREE.Vector3(0,0,0);
+      var vec3 = new THREE.Vector3(); // re-use
+      for ( var i = 0, l = pos.count; i < l; i ++ ) {
 
-	
-	var dist = new THREE.Vector2(x, y).sub(center);
+        vec3.fromBufferAttribute(pos, i);
+        vec3.sub(center);
+        
+        var z = Math.sin( vec3.length() /- waveSize + (theTime)) * magnitude;
+        
+        pos.setZ(i, z);
 
-    positions[ index ++ ] = x;
-    positions[ index ++ ] = y;
-    positions[ index ++ ] = z;
+      }
 
-    x += dist.x;
-    y += dist.v;
-    z += Math.sin( dist.length()/- waveSize + (theTime)) * magnitude;
-
-  }
-
-  objects[0].geometry.attributes.position.needsUpdate = true
+      pos.needsUpdate = true
+    }
 
 }
 
-
 function waves( objects, waveSize, magnitude ){
-
 
 	const theTime =  performance.now() * .001 ;
 
@@ -53,9 +47,7 @@ function waves( objects, waveSize, magnitude ){
 
       }
 	    objects.children[o].geometry.verticesNeedUpdate = true;
-
 	}
-
 }
 
 export { waves, wavesBuffer }
