@@ -11,7 +11,7 @@ import { createImg } from '/js/images.js';
 import { waves, wavesBuffer } from '/js/waves';
 
 const urlData = require('/img/girl.png');
-const urlData2 = require('/img/partOne.svg');
+const urlData2 = require('/img/hair.png');
 //const urlData2 = require('/img/tiger.svg');
 //const urlData3 = require('/img/partTwo.svg');
 //const urlData4 = require('/img/hair.png');
@@ -22,7 +22,7 @@ let objects =[];
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera, container, renderer, scene, cube, myGroup, myGroup2, girl, hair, myGroup3;
+let camera, container, renderer, scene, cube, group, girl, hair;
 
 function init() {
 
@@ -34,23 +34,14 @@ function init() {
   createOrbitControls( camera, container );
   createLights( scene );
 
-  scene.add( myGroup );
-  myGroup.position.set( -2.4, 15.2, -10);
-  myGroup.scale.multiplyScalar( 0.145 );
-
-  console.log(myGroup)
-
-  //myGroup2.position.set( -69, 78, -10);
-  //scene.add( myGroup2 );
-
   //plane = createGridHelp( scene );
-  girl = createImg( scene,.99,-7.6,-11, imgOne, .2);
+  createImg( scene,.99,-7.6,-11, imgOne, .2);
+  hair = createImg( scene,3.6,9.5,-10.3, imgTwo, .3);
   /*
-  hair = createImg( scene,2.9,9,-10.2, imgTwo, .25);
-  myGroup3 = new THREE.Group();
-  myGroup3.add(hair)
-  //scene.add( myGroup3 );
-  */
+  group = new THREE.Group();
+  group.add( hair )
+  scene.add( group );
+*/
   renderer = createRenderer( container );
 
   renderer.setAnimationLoop( () => {
@@ -64,9 +55,12 @@ function init() {
 
 function update() {
   stats.update();
-  wavesBuffer( myGroup, 30,10, .001);
-  //wavesBuffer( myGroup2, 2,3, .001);
-  //wavesBuffer( myGroup3, 2.1,.6, .001);
+  const time = ( 0.0001 * performance.now() ) % 1;
+  
+
+  wavesBuffer( hair, 2.7,.6, .003);
+  hair.material.color.setHSL( time , .5, 0.5 );
+
 }
 
 function render() {
@@ -98,7 +92,15 @@ loader.load( urlData, function ( texture ) {
     imgOne = texture;
 
 } );
+let loader3 = new THREE.TextureLoader(manager);
+loader3.load( urlData2, function ( texture3 ) {
+    texture3.encoding = THREE.sRGBEncoding;
+    imgTwo = texture3;
 
+} );
+
+
+/*
 var loader2 = new SVGLoader( manager );
 
 loader2.load( urlData2, function ( data ) {
@@ -129,7 +131,6 @@ loader2.load( urlData2, function ( data ) {
                 var mesh = new THREE.Mesh( geometry, material );
                 group.add( mesh );
               }
-    
             var strokeColor = path.userData.style.stroke;
 
               var material = new THREE.MeshBasicMaterial( {
@@ -152,3 +153,4 @@ loader2.load( urlData2, function ( data ) {
           }
           myGroup = group;
         } );
+        */
