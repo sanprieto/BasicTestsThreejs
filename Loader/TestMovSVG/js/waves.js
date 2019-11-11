@@ -1,30 +1,25 @@
 import * as THREE from 'three';
 
 
-function wavesBuffer( objects, waveSize, magnitude ){
+function wavesBuffer( objects, waveSize, magnitude, speed ){
 
-    const theTime =  performance.now() * .001;
-
+    const theTime =  performance.now() * speed ;
     for ( var o = 0; o < objects.children.length; o++ ) {
 
       var pos = objects.children[o].geometry.attributes.position;
-
-      let center = new THREE.Vector3(0,0,0);
+      let center = new THREE.Vector3(0,4,0);
       var vec3 = new THREE.Vector3(); // re-use
-      for ( var i = 0, l = pos.count; i < l; i ++ ) {
 
-        vec3.fromBufferAttribute(pos, i);
-        vec3.sub(center);
-        
-        var z = Math.sin( vec3.length() /- waveSize + (theTime)) * magnitude;
-        
-        pos.setZ(i, z);
+        for ( let i = 0, l = pos.count; i < l; i ++ ) {
 
-      }
 
-      pos.needsUpdate = true
+            vec3.fromBufferAttribute(pos, i);
+            vec3.sub(center);
+            var z = Math.sin( vec3.length() /- waveSize + (theTime)) * magnitude;
+            pos.setZ(i, z);
+        }
+        pos.needsUpdate = true;
     }
-
 }
 
 function waves( objects, waveSize, magnitude ){

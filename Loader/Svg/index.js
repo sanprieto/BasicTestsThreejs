@@ -11,8 +11,8 @@ import Stats from 'stats.js';
 const urlData = require('/img/starts.jpg');
 const urlData2 = require('/img/brujula.jpg');
 //const urlData3 = require('/img/hair.svg');
-const urlData3 = require('/img/tiger.svg');
-//const urlData3 = require('/img/test.svg');
+//const urlData3 = require('/img/tiger.svg');
+const urlData3 = require('/img/test.svg');
 let imgOne, imgTwo, plane;
 
 let stats = new Stats();
@@ -106,59 +106,59 @@ loader2.load( urlData, function ( texture2 ) {
 } );
 
 
-var loader3 = new THREE.SVGLoader( manager );
+var loader3 = new SVGLoader( manager );
 
 loader3.load( urlData3, function ( data ) {
 
     var paths = data.paths;
+          var group = new THREE.Group();
+          group.scale.multiplyScalar( 0.25 );
+          group.position.x = - 70;
+          group.position.y = 70;
+          group.scale.y *= - 1;
+          for ( var i = 0; i < paths.length; i ++ ) {
+            var path = paths[ i ];
+            
+            var fillColor = path.userData.style.fill;
+      
+              var material = new THREE.MeshBasicMaterial( {
+                color: new THREE.Color().setStyle( fillColor ).convertSRGBToLinear(),
+                opacity: path.userData.style.fillOpacity,
+                transparent: path.userData.style.fillOpacity < 1,
+                side: THREE.DoubleSide,
+                depthWrite: false,
+                wireframe: false
+              } );
+              var shapes = path.toShapes( true );
+              for ( var j = 0; j < shapes.length; j ++ ) {
+                var shape = shapes[ j ];
+                var geometry = new THREE.ShapeBufferGeometry( shape );
+                var mesh = new THREE.Mesh( geometry, material );
+                group.add( mesh );
+              }
+      
+            var strokeColor = path.userData.style.stroke;
 
-    var group = new THREE.Group();
-    group.scale.multiplyScalar( 0.25 );
-    group.position.x = - 70;
-    group.position.y = 70;
-    group.scale.y *= - 1;
+              var material = new THREE.MeshBasicMaterial( {
+                color: new THREE.Color().setStyle( strokeColor ).convertSRGBToLinear(),
+                opacity: path.userData.style.strokeOpacity,
+                transparent: path.userData.style.strokeOpacity < 1,
+                side: THREE.DoubleSide,
+                depthWrite: false,
+                wireframe: false
+              } );
+              for ( var j = 0, jl = path.subPaths.length; j < jl; j ++ ) {
+                var subPath = path.subPaths[ j ];
+                var geometry = SVGLoader.pointsToStroke( subPath.getPoints(), path.userData.style );
+                if ( geometry ) {
+                  var mesh = new THREE.Mesh( geometry, material );
+                  group.add( mesh );
+                }
+              }
+            
+          }
+          myGroup = group;
+        } );
 
-    for ( var i = 0; i < paths.length; i ++ ) {
 
-      var path = paths[ i ];
-
-      var material = new THREE.MeshBasicMaterial( {
-        color: path.color.convertSRGBToLinear(),
-        opacity: 1,
-        transparent: true ,
-        side: THREE.DoubleSide,
-        depthWrite: false
-      } );
-
-      var shapes = path.toShapes( true );
-
-      for ( var j = 0; j < shapes.length; j ++ ) {
-
-        var shape = shapes[ j ];
-        var geometry = new THREE.ShapeBufferGeometry( shape );
-        //geometry.applyMatrix(new THREE.Matrix4().makeScale ( 1, -1, 1 ))
-        var mesh = new THREE.Mesh( geometry, material );
-
-        group.add( mesh );
-
-      }
-
-    }
-    myGroup = group;
-    //scene.add( group );
-
-  },
-  // called when loading is in progresses
-  function ( xhr ) {
-
-    console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
-  },
-  // called when loading has errors
-  function ( error ) {
-
-    console.log( 'An error happened' );
-
-  }
-);
 
