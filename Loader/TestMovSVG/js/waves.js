@@ -8,10 +8,20 @@ function wavesBuffer( object, waveSize, magnitude, speed ){
       var vec3 = new THREE.Vector3(); // re-use
 
         for ( let i = 0, l = pos.count; i < l; i ++ ) {
+
+          if((i>=0)&&(i<1320)){
             vec3.fromBufferAttribute(pos, i);
             vec3.sub(center);
             var z = Math.sin( vec3.length() /- waveSize + (theTime)) * magnitude;
             pos.setZ(i, z);
+          }
+          if((i>=1500)&&(i<1600)){
+            vec3.fromBufferAttribute(pos, i);
+            vec3.sub(center);
+            var z = Math.sin( vec3.length() /- waveSize + (theTime)) * magnitude;
+            pos.setZ(i, z);
+          }
+
         }
         pos.needsUpdate = true;
     

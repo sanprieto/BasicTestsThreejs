@@ -36,12 +36,9 @@ function init() {
 
   //plane = createGridHelp( scene );
   createImg( scene,.99,-7.6,-11, imgOne, .2);
-  hair = createImg( scene,3.6,9.5,-10.3, imgTwo, .3);
-  /*
-  group = new THREE.Group();
-  group.add( hair )
-  scene.add( group );
-*/
+  hair = createImg( scene,3.7,9.4,-10.3, imgTwo, .28, 40,40,.5);
+  console.log(hair.geometry.attributes.position);
+
   renderer = createRenderer( container );
 
   renderer.setAnimationLoop( () => {
@@ -55,13 +52,15 @@ function init() {
 
 function update() {
   stats.update();
-  const time = ( 0.0001 * performance.now() ) % 1;
-  
-
-  wavesBuffer( hair, 2.7,.6, .003);
-  hair.material.color.setHSL( time , .5, 0.5 );
+  const time = ( 0.00005 * performance.now() ) % 2;
+  wavesBuffer( hair, 2,.5, .002);
+  const hue = .10 + .04 * Math.sin( time * ( 2 * Math.PI )); //orange -yellow.
+  //console.log( hue );
+  hair.material.color.setHSL(  hue, 1, .5 );
 
 }
+
+
 
 function render() {
 
