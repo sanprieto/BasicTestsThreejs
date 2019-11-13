@@ -27,7 +27,7 @@ function createMusic( camera, urlData ){
 	analyser.analyser.minDecibels = -100; // -100
 	
 
-	return analyser;
+	return { analyser, sound } ;
 
 
 }
