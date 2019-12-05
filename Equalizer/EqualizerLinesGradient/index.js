@@ -20,9 +20,11 @@ let amount = 300;
 const urlData = require('./music/o.mp3');
 //const urlData = require('./music/engine.mp3');
 
-document.getElementById('buttom').addEventListener('click', function() {
+document.getElementById('thePlay').addEventListener('click', function() {
+
   document.getElementById('overlay').style.display = "none";
   beep.sound.play();
+  beep.sound.setVolume( 0.3 );
 
 
 });
@@ -44,7 +46,7 @@ function init() {
 
     path = new createPath( circumference ,heightY );
     lines = drawPath( path, scene, 0x000000 );
-    circumference = circumference + .01;
+    circumference = circumference + .08;
 
   }
 

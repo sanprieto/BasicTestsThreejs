@@ -16,6 +16,9 @@ function createMusic( camera, urlData ){
 	  sound.setBuffer( buffer );
 	  sound.setLoop( true );
 	  sound.setVolume( 0.5 );
+
+
+	  document.getElementById('thePlay').style.display = "inherit";
 	  //sound.play();
 	});
 
