@@ -6,11 +6,11 @@
   "dependencies": {
     "js": "^0.1.0",
     "main.css": "^2.0.0",
-    "parcel-bundler": "^1.12.3",
+    "parcel-bundler": "^1.12.4",
     "simplex-noise": "^2.4.0",
     "stats.js": "^0.17.0",
-    "three": "^0.108.0",
-    "three-orbitcontrols": "^2.108.1"
+    "three": "^0.111.0",
+    "three-orbitcontrols": "^2.110.1"
   },
   "devDependencies": {},
   "scripts": {
