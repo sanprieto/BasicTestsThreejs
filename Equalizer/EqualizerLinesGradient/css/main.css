@@ -11,8 +11,10 @@ body {
   height: 100%;
   cursor: -webkit-grab;
 }
-#overlay {
+#content{
+
 	position: absolute;
+	z-index: 1;
 	top: 0;
 	left: 0;
 	width: 100%;
@@ -20,37 +22,76 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	opacity: 1;
-	z-index: 1;
-}
-#overlay > div {
-	text-align: center;
-}
-#overlay > div > p > button {
 
-	background: transparent;
+}
+#myMain{
+
+   width: 600px;
+   height: 445px;
+
+
+}
+a {
+	text-decoration: none;
 	color: black;
-	border: 0px;
-	cursor: pointer;
-	font-size: 224px;
-}
-
-#overlay p {
-	width: 600px;
-	margin: auto;
 }
 h1 {
 	font-size: 70px;
+	margin: 0px;
 }
 #thePlay{
 
+	display: none;
+}
+#music{
+
+    width: 65px;
+    position: absolute;
+    right: 10px;
+    top: 70px;
+    z-index: 1;
+}
+.iconM {
+
+  width: 65px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  z-index: 1;
+
+}
+
+.myButton{
 	cursor: pointer;
 	border: 3px solid black;
 	width: 159px;
 	margin: auto;
 	font-size: 25px;
 	border-radius: 3px;
-	display: none;
+
 }
 
+@media screen and (max-width: 480px) {
+	 h1{ 
+	 	font-size: 40px;
+	 	margin-bottom: 0px;
+	 }
+	 #myMain{
+		
+	   width: 350px;
+	   margin: auto;
+
+	}
+	.iconM{
+		top: 5px;
+	    width: 40px;
+	    display: none;
+	}
+	#music{
+		top: 50px;
+		width: 55px;
+		display: none;
+	}
+}
 

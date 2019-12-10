@@ -15,17 +15,22 @@ let camera,container, renderer, scene, path, lines , lines2, axis, tangent, radi
 let up = new THREE.Vector3( 0, 1, 0 );
 let circumference = 1;
 let heightY = 15;
-let amount = 512;
+let amount = 256;
 
 const urlData = require('./music/o.mp3');
 //const urlData = require('./music/engine.mp3');
 
 document.getElementById('thePlay').addEventListener('click', function() {
 
-  document.getElementById('overlay').style.display = "none";
-  //beep.sound.play();
+  //document.getElementById('content').style.display = "none";
+  beep.sound.play();
   beep.sound.setVolume( 0.3 );
 
+
+});
+document.getElementById('music').addEventListener('change', function(e) {
+
+  beep.sound.setVolume( this.value / 100 );
 
 });
 
@@ -34,7 +39,7 @@ function init() {
   container = document.querySelector( '#magic' );
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color( 0x000000 );
+  scene.background = new THREE.Color( 0xFFFFFF );
 
   camera = createCamera( container );
   createOrbitControls( camera, container );
@@ -46,8 +51,8 @@ function init() {
 
     path = new createPath( circumference ,heightY );
     lines = drawPath( path, scene, 0x000000 );
-    //circumference = circumference + .08;
-    circumference = circumference + .005;
+    circumference = circumference + .08;
+
 
   }
 
@@ -72,11 +77,11 @@ function update() {
     if( beep.analyser.getFrequencyData()[i] >=1 ){
 
       lines[i].rotation.z = THREE.Math.degToRad( beep.analyser.getFrequencyData()[i]  )
-      lines[i].rotation.x = THREE.Math.degToRad( beep.analyser.getFrequencyData()[i]  )
+      //lines[i].rotation.x = THREE.Math.degToRad( beep.analyser.getFrequencyData()[i]  )
       lines[i].position.y = beep.analyser.getFrequencyData()[i] * 0.01;
 
     }
-    if(( beep.analyser.getFrequencyData()[i] == 0)||(i > 512 )){
+    if(( beep.analyser.getFrequencyData()[i] == 0)||(i > 256 )){
 
       lines[i].material.color.setHSL( time + i/200 , 1, 0.5 );
       lines[i].rotation.y -= 0.005;

@@ -23,8 +23,7 @@ function createMusic( camera, urlData ){
 	});
 
 	// create an AudioAnalyser, passing in the sound and desired fftSize
-	let analyser = new THREE.AudioAnalyser( sound, 1024 );
-	console.log(analyser)
+	let analyser = new THREE.AudioAnalyser( sound, 512 );
 	
 	// get the average frequency of the sound
 	var data = analyser.getFrequencyData();
