@@ -4,7 +4,6 @@
   "description": "Basic algorithms to learn three.js",
   "main": "index.js",
   "dependencies": {
-    "js": "^0.1.0",
     "main.css": "^2.0.0",
     "parcel-bundler": "^1.12.4",
     "three": "^0.111.0",
