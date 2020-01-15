@@ -9,8 +9,7 @@
     "simplex-noise": "^2.4.0",
     "stats.js": "^0.17.0",
     "three": "^0.111.0",
-    "three-orbitcontrols": "^2.110.1",
-    "vm2": "^3.8.4"
+    "three-orbitcontrols": "^2.110.1"
   },
   "devDependencies": {},
   "scripts": {
