@@ -4,6 +4,7 @@ import fontJSON from '../fonts/Montserrat_Regular.typeface.json';
 let line = [];
 let fullText = [];
 let letters;
+let allParticles =[];
 
 let material = new THREE.MeshPhongMaterial( { color: 0x6699ff, wireframe: true } ); 
 let letterSetting = {
@@ -18,28 +19,31 @@ let letterSetting = {
 };
 let PointMaterial = new THREE.PointsMaterial({
 	color: 0x888888,
-	size: .1
+	size: .2,
 });
+let particles;
+var PARTICLE_SIZE = 1;
 
-
-function createParticlesText( scene, contentText ){
+function createParticlesText( scene, contentText, Allstar ){
 
 	const loader = new THREE.FontLoader();
 	const font = loader.parse( fontJSON );
 
 	contentText = contentText.split('\n');
 	console.log(contentText)
+	var lineText = []
+	var points, xMid;
 
-	for( var i = 0; i < contentText.length ; i ++ ){ 
+	for( let i = 0; i < contentText.length ; i ++ ){ 
 
-		let shapes = font.generateShapes( contentText[i], 1 );
+		let shapes = font.generateShapes( contentText[i],3);
 
 		const geometry = new THREE.ShapeGeometry( shapes );
 		geometry.computeBoundingBox();
 
-		let xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+		xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
 		geometry.translate( xMid, 0, 0 );
-		
+	
 		let holeShapes = [];
 
 		for ( let q = 0; q < shapes.length; q ++ ) {
@@ -58,92 +62,41 @@ function createParticlesText( scene, contentText ){
 			}
 
 		}
-
 		shapes.push.apply( shapes, holeShapes );
+	
 		
-		var  lineText = new THREE.Object3D();
-
 		for ( let  x = 0; x < shapes.length; x ++ ) {
 
 			let shape = shapes[ x ];
-			let points = shape.getSpacedPoints(1000);
-			let geometry = new THREE.BufferGeometry().setFromPoints( points );
+			let points = shape.getSpacedPoints(20);
+			let geometry1 = new THREE.Geometry().setFromPoints( points );
+			geometry1.translate( xMid, - ((i * 1) * 3.5), 0 );
 
-			geometry.translate( xMid, - ((i * 1) * 1.5), 0 );
+			var vertices = geometry1.vertices;
+			var positions = new Float32Array( vertices.length * 3 );
+			var vertex;
 
-			var starField = new THREE.Points( geometry, PointMaterial );
-			lineText.add( starField );
+			for ( var ix = 0, l = vertices.length; ix < l; ix ++ ) {
 
-		}
-		scene.add( starField );
-		console.log( starField );
-		scene.add( lineText );
-	}
-
-
-}
-
-function createLineText( scene, contentText ){
-
-	const loader = new THREE.FontLoader();
-	const font = loader.parse( fontJSON );
-
-	contentText = contentText.split('\n');
-	console.log(contentText)
-
-	for( var i = 0; i < contentText.length ; i ++ ){ 
-
-		let shapes = font.generateShapes( contentText[i], 1 );
-
-		const geometry = new THREE.ShapeGeometry( shapes );
-		geometry.computeBoundingBox();
-
-		let xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
-		geometry.translate( xMid, 0, 0 );
-		
-		let holeShapes = [];
-
-		for ( let q = 0; q < shapes.length; q ++ ) {
-
-			let shape = shapes[ q ];
-
-			if ( shape.holes && shape.holes.length > 0 ) {
-
-				for ( let  j = 0; j < shape.holes.length; j ++ ) {
-
-					let  hole = shape.holes[ j ];
-					holeShapes.push( hole );
-
-				}
+				vertex = vertices[ ix ];
+				vertex.toArray( positions, ix * 3 );
 
 			}
+			var geometryParty = new THREE.BufferGeometry();
+			geometryParty.setAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+			console.log( 'geometryParty', geometryParty )
 
+			particles = new THREE.Points( geometry1, PointMaterial );
+			lineText.push( particles );
+			scene.add( particles );
 		}
 
-		shapes.push.apply( shapes, holeShapes );
-		
-		var  lineText = new THREE.Object3D();
 
-		for ( let  x = 0; x < shapes.length; x ++ ) {
-
-			let shape = shapes[ x ];
-
-			let points = shape.getPoints();
-			let geometry = new THREE.BufferGeometry().setFromPoints( points );
-
-			geometry.translate( xMid, - ((i * 1) * 1.5), 0 );
-
-			let lineMesh = new THREE.Line( geometry, matDark );
-			lineText.add( lineMesh );
-
-		}
-
-		scene.add( lineText );
 	}
+	return lineText;
 
-	createParticles( lineText , scene );
-	return fullText;
 }
+
 
 function createTextByLines( scene, contentText ){
 
@@ -209,9 +162,9 @@ function createTextByLetters( scene, contentText ){
 		    scene.add( letters );
 		    fullText.push( letters );
 		}
-	}
-	createParticles( fullText, scene );
+
 	return fullText;
+}
 }
 
 

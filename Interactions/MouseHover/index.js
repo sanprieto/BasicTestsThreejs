@@ -3,7 +3,7 @@ import '/css/main.css';
 import { createCamera, createRenderer } from '/js/basicComponents';
 import { createOrbitControls } from '/js/sceneControls';
 import { createLights } from '/js/lights';
-import { createMeshes, createGridHelp } from '/js/objects';
+import { createMeshes } from '/js/objects';
 import Stats from 'stats.js';
 import { createImg } from '/js/images.js';
 import { createParticlesText } from '/js/myTexts';
@@ -12,7 +12,8 @@ import { createParticlesText } from '/js/myTexts';
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera, container, renderer, scene, cube, imgOne, imgTwo, texts ;
+var camera, container, renderer, scene, cube, imgOne, imgTwo, texts, INTERSECTED ,intersects, mouse, raycaster;
+
 
 function init() {
 
@@ -24,9 +25,12 @@ function init() {
   camera = createCamera( container );
   createOrbitControls( camera, container );
   createLights( scene );
-  //createGridHelp( scene );
-  texts = createParticlesText ( scene, 'Everything you can\nimagine is real');
 
+  texts = createParticlesText ( scene, 'Cabeza\nBuque');
+  console.log( 'texts', texts )
+
+  raycaster = new THREE.Raycaster();
+  mouse = new THREE.Vector2();
 
   renderer = createRenderer( container );
 
@@ -37,15 +41,47 @@ function init() {
 
   } );
 
+  document.addEventListener( 'mousemove', onDocumentMouseMove );
+  window.addEventListener( 'resize', onWindowResize );
+
 }
 
 function update() {
   stats.update();
+  raycaster.setFromCamera( mouse, camera );
+  raycaster.params.Points.threshold = .05;
+  intersects = raycaster.intersectObjects( texts );
+
+  if ( intersects.length > 0 ) {
+
+    if ( INTERSECTED != intersects[ 0 ].index ) {
+
+      console.log('eooooo Si', intersects[0].index )
+      INTERSECTED = intersects[ 0 ].index;
+    }
+
+  } else if ( INTERSECTED !== null ) {
+
+    console.log('pos no');
+
+    INTERSECTED = null;
+
+  }
+
 }
 
 function render() {
 
   renderer.render( scene, camera );
+
+}
+
+function onDocumentMouseMove( event ) {
+
+  event.preventDefault();
+
+  mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+  mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
 }
 
@@ -57,6 +93,7 @@ function onWindowResize() {
 
 }
 
-window.addEventListener( 'resize', onWindowResize );
+
+
 
 init();

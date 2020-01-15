@@ -25,8 +25,7 @@ function createLights( scene ) {
 
 	scene.add( ambientLight, dirLight );
 
-	var helper = new THREE.CameraHelper( dirLight.shadow.camera );
-	scene.add( helper )
+
 }
 
 export { createLights };
