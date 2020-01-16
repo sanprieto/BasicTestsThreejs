@@ -46,9 +46,9 @@ function init() {
 function update() {
   stats.update();
 
-  var newX = lerp( -4, 4, ease(t));   // interpolate between a and b where
-  var newY = lerp( 0, 0, ease(t));   // t is first passed through a easing
-  var newZ = lerp( 0, 0, ease(t));   // function in this example.
+  var newX = interpolation ( -4, 4, ease(t)); 
+  var newY = interpolation ( 0, 0, ease(t));
+  var newZ = interpolation ( 0, 0, ease(t));
   cube.position.set( newX, newY, newZ );
   t += dt;
   if (t <= 0 || t >=1) dt = - dt;
@@ -61,8 +61,8 @@ function render() {
 
 }
 
-function lerp(a, b, t) {return a + (b - a) * t}
-function ease(t) { return t<0.5 ? 2*t*t : -1+(4-2*t)*t}
+const interpolation =  (a, b, t)  => {return a + (b - a) * t}
+const ease = ( t ) => { return t<0.5 ? 2*t*t : -1+(4-2*t)*t }
 
 
 function onWindowResize() {
