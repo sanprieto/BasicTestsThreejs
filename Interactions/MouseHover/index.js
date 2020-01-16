@@ -12,8 +12,9 @@ import { createParticlesText } from '/js/myTexts';
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-var camera, container, renderer, scene, cube, imgOne, imgTwo, texts, INTERSECTED ,intersects, mouse, raycaster;
-
+let camera, container, renderer, scene, cube, imgOne, imgTwo, texts, INTERSECTED ,intersects, mouse, raycaster;
+let time = 0;
+let step = 0.01;
 
 function init() {
 
@@ -26,8 +27,9 @@ function init() {
   createOrbitControls( camera, container );
   createLights( scene );
 
-  texts = createParticlesText ( scene, 'Cabeza\nBuque');
-  console.log( 'texts', texts )
+  cube = createMeshes( scene );
+
+  texts = createParticlesText ( scene, 'X\nO');
 
   raycaster = new THREE.Raycaster();
   mouse = new THREE.Vector2();
@@ -48,6 +50,18 @@ function init() {
 
 function update() {
   stats.update();
+
+  var theX = lerp ( cube.position.x , 4, time  );
+  var theY = lerp ( cube.position.y , 4, time  );
+  var theZ = lerp ( cube.position.z , 4, time  );
+
+  cube.position.set( theX, theY, theZ );
+
+  time += step;
+  if (time <= 0 || time >=1)step = -step ;
+
+
+ 
   raycaster.setFromCamera( mouse, camera );
   raycaster.params.Points.threshold = .05;
   intersects = raycaster.intersectObjects( texts );
@@ -56,7 +70,9 @@ function update() {
 
     if ( INTERSECTED != intersects[ 0 ].index ) {
 
+
       console.log('eooooo Si', intersects[0].index )
+
       INTERSECTED = intersects[ 0 ].index;
     }
 
@@ -75,6 +91,15 @@ function render() {
   renderer.render( scene, camera );
 
 }
+function lerp(a, b, t) {return a + (b - a) * t}
+
+const interpolation = ( a, b , t ) => { 
+
+
+  return a + ( b - a ) * t
+
+};
+
 
 function onDocumentMouseMove( event ) {
 

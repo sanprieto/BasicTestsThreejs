@@ -30,7 +30,6 @@ function createParticlesText( scene, contentText, Allstar ){
 	const font = loader.parse( fontJSON );
 
 	contentText = contentText.split('\n');
-	console.log(contentText)
 	var lineText = []
 	var points, xMid;
 
@@ -63,12 +62,11 @@ function createParticlesText( scene, contentText, Allstar ){
 
 		}
 		shapes.push.apply( shapes, holeShapes );
-	
-		
+			
 		for ( let  x = 0; x < shapes.length; x ++ ) {
 
 			let shape = shapes[ x ];
-			let points = shape.getSpacedPoints(20);
+			let points = shape.getSpacedPoints(100);
 			let geometry1 = new THREE.Geometry().setFromPoints( points );
 			geometry1.translate( xMid, - ((i * 1) * 3.5), 0 );
 
@@ -84,19 +82,15 @@ function createParticlesText( scene, contentText, Allstar ){
 			}
 			var geometryParty = new THREE.BufferGeometry();
 			geometryParty.setAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
-			console.log( 'geometryParty', geometryParty )
 
 			particles = new THREE.Points( geometry1, PointMaterial );
 			lineText.push( particles );
 			scene.add( particles );
 		}
-
-
 	}
 	return lineText;
 
 }
-
 
 function createTextByLines( scene, contentText ){
 
@@ -144,7 +138,6 @@ function createTextByLetters( scene, contentText ){
 		geometry.computeBoundingBox();
 
 		let xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
-		console.log( xMid )
 
 		for ( var u = 0; u < shapes.length; u ++ ) {
 
