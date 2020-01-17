@@ -22,7 +22,7 @@ let PointMaterial = new THREE.PointsMaterial({
 	size: .2,
 });
 let particles;
-var PARTICLE_SIZE = 1;
+
 
 function createParticlesText( scene, contentText, Allstar ){
 
@@ -55,9 +55,7 @@ function createParticlesText( scene, contentText, Allstar ){
 
 					let  hole = shape.holes[ j ];
 					holeShapes.push( hole );
-
 				}
-
 			}
 
 		}
@@ -66,7 +64,7 @@ function createParticlesText( scene, contentText, Allstar ){
 		for ( let  x = 0; x < shapes.length; x ++ ) {
 
 			let shape = shapes[ x ];
-			let points = shape.getSpacedPoints(100);
+			let points = shape.getSpacedPoints(10);
 			let geometry1 = new THREE.Geometry().setFromPoints( points );
 			geometry1.translate( xMid, - ((i * 1) * 3.5), 0 );
 
@@ -83,7 +81,7 @@ function createParticlesText( scene, contentText, Allstar ){
 			var geometryParty = new THREE.BufferGeometry();
 			geometryParty.setAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
 
-			particles = new THREE.Points( geometry1, PointMaterial );
+			particles = new THREE.Points( geometryParty, PointMaterial );
 			lineText.push( particles );
 			scene.add( particles );
 		}

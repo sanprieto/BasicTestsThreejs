@@ -14,7 +14,16 @@ document.body.appendChild( stats.dom );
 
 let camera, container, renderer, scene, cube, imgOne, imgTwo, texts, INTERSECTED ,intersects, mouse, raycaster;
 let time = 0;
-let step = 0.01;
+let step = 0.009;
+let executionInter = false;
+let cont = 0;
+let mixer = [];
+
+const objectIntersect = {
+  obj: 'obj',
+  index: 0,
+  initial: 'vector'
+}
 
 function init() {
 
@@ -27,9 +36,10 @@ function init() {
   createOrbitControls( camera, container );
   createLights( scene );
 
-  cube = createMeshes( scene );
+  //cube = createMeshes( scene );
 
-  texts = createParticlesText ( scene, 'X\nO');
+  texts = createParticlesText ( scene, 'l');
+  console.log( texts )
 
   raycaster = new THREE.Raycaster();
   mouse = new THREE.Vector2();
@@ -51,17 +61,6 @@ function init() {
 function update() {
   stats.update();
 
-  var theX = lerp ( cube.position.x , 4, time  );
-  var theY = lerp ( cube.position.y , 4, time  );
-  var theZ = lerp ( cube.position.z , 4, time  );
-
-  cube.position.set( theX, theY, theZ );
-
-  time += step;
-  if (time <= 0 || time >=1)step = -step ;
-
-
- 
   raycaster.setFromCamera( mouse, camera );
   raycaster.params.Points.threshold = .05;
   intersects = raycaster.intersectObjects( texts );
@@ -70,20 +69,86 @@ function update() {
 
     if ( INTERSECTED != intersects[ 0 ].index ) {
 
-
-      console.log('eooooo Si', intersects[0].index )
+      objectIntersect.obj = intersects[0].object;
+      objectIntersect.index = intersects[0].index;
+      objectIntersect.initial = intersects[0].point;
+      
+      mixer.push( objectIntersect );
 
       INTERSECTED = intersects[ 0 ].index;
     }
 
   } else if ( INTERSECTED !== null ) {
 
-    console.log('pos no');
-
+    //console.log('pos no');
     INTERSECTED = null;
+  }
+
+  for ( let  x = 0; x < mixer.length; x ++ ) {
+
+    updateInterpolation( mixer[x] )
 
   }
 
+}
+
+
+
+const updateInterpolation = ( element ) => { //Time es la clave es lo que tengo que pasar 
+
+  console.log( 'element.initial.x', element.initial.x, element  )
+  const theX = interpolation ( element.initial.x , 1 , ease( time ));
+  const theY = interpolation ( 0,0, ease( time ));
+  const theZ = interpolation ( 0,0, ease( time ));
+
+  // Mover mixer con un for para cada element --------****
+
+  const pos = element.obj.geometry.attributes.position;
+  var vec3 = new THREE.Vector3();
+
+  vec3.x = theX ;
+  vec3.y = theY;
+  vec3.z = theZ;
+  pos.setXYZ( element.index, vec3.x, vec3.y, vec3.z );
+
+  pos.needsUpdate = true;
+
+/*
+  const pos = element.obj.geometry.attributes.position;
+  var vec3 = new THREE.Vector3();
+
+  for (var i = 0, l = pos.count; i < l; i++) {
+    vec3.x = theX * .1 +i;
+    vec3.y = theY;
+    vec3.z = theZ;
+    pos.setXYZ( i, vec3.x, vec3.y, vec3.z );
+  }
+  pos.needsUpdate = true;
+*/
+  time += step;
+
+  if (time <= 0 || time >=1){
+    cont++;
+    step = -step 
+
+    /*
+    if(cont == 2){
+
+      for ( let  x = 0; x < mixer.length; x ++ ) {
+
+        console.log( 'x', x, element.obj, element.index  )
+        if( mixer[x].obj == element.obj){
+
+          mixer.splice(x,1);
+          console.log( mixer )
+        }
+
+      }
+        
+    }*/
+  }
+
+  ///fin del for mixer
 }
 
 function render() {
@@ -91,15 +156,10 @@ function render() {
   renderer.render( scene, camera );
 
 }
-function lerp(a, b, t) {return a + (b - a) * t}
-
-const interpolation = ( a, b , t ) => { 
 
 
-  return a + ( b - a ) * t
-
-};
-
+const interpolation = ( a, b , t ) => { return a + ( b - a ) * t };
+const ease = ( t ) => { return t<0.5 ? 2*t*t : -1+(4-2*t)*t }
 
 function onDocumentMouseMove( event ) {
 
@@ -117,8 +177,5 @@ function onWindowResize() {
   renderer.setSize( container.clientWidth, container.clientHeight );
 
 }
-
-
-
 
 init();
