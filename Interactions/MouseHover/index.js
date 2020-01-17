@@ -13,17 +13,11 @@ let stats = new Stats();
 document.body.appendChild( stats.dom );
 
 let camera, container, renderer, scene, cube, imgOne, imgTwo, texts, INTERSECTED ,intersects, mouse, raycaster;
-let time = 0;
 let step = 0.009;
 let executionInter = false;
 let cont = 0;
 let mixer = [];
-
-const objectIntersect = {
-  obj: 'obj',
-  index: 0,
-  initial: 'vector'
-}
+let startTime = 0;
 
 function init() {
 
@@ -69,11 +63,8 @@ function update() {
 
     if ( INTERSECTED != intersects[ 0 ].index ) {
 
-      objectIntersect.obj = intersects[0].object;
-      objectIntersect.index = intersects[0].index;
-      objectIntersect.initial = intersects[0].point;
-      
-      mixer.push( objectIntersect );
+      mixer.push( intersects[0] );
+      startTime = performance.now();
 
       INTERSECTED = intersects[ 0 ].index;
     }
@@ -85,53 +76,39 @@ function update() {
   }
 
   for ( let  x = 0; x < mixer.length; x ++ ) {
-
-    updateInterpolation( mixer[x] )
-
+    updateInterpolation( mixer[x], startTime );
   }
-
 }
 
 
 
-const updateInterpolation = ( element ) => { //Time es la clave es lo que tengo que pasar 
+const updateInterpolation = ( element, startTime ) => { //Time es la clave es lo que tengo que pasar 
+  
+    console.log( startTime )
+    const time = ( .001 * (performance.now()-startTime));
+    console.log( 'time', time, startTime );
 
-  console.log( 'element.initial.x', element.initial.x, element  )
-  const theX = interpolation ( element.initial.x , 1 , ease( time ));
-  const theY = interpolation ( 0,0, ease( time ));
-  const theZ = interpolation ( 0,0, ease( time ));
+    const theX = interpolation ( element.point.x , element.point.x + 1 , time );
+    const theY = interpolation ( element.point.y, element.point.y + 1 ,  time );
+    const theZ = interpolation ( element.point.z, element.point.z + 1 ,  time );
 
-  // Mover mixer con un for para cada element --------****
+    const pos = element.object.geometry.attributes.position;
+    var vec3 = new THREE.Vector3();
 
-  const pos = element.obj.geometry.attributes.position;
-  var vec3 = new THREE.Vector3();
-
-  vec3.x = theX ;
-  vec3.y = theY;
-  vec3.z = theZ;
-  pos.setXYZ( element.index, vec3.x, vec3.y, vec3.z );
-
-  pos.needsUpdate = true;
-
-/*
-  const pos = element.obj.geometry.attributes.position;
-  var vec3 = new THREE.Vector3();
-
-  for (var i = 0, l = pos.count; i < l; i++) {
-    vec3.x = theX * .1 +i;
+    vec3.x = theX ;
     vec3.y = theY;
     vec3.z = theZ;
-    pos.setXYZ( i, vec3.x, vec3.y, vec3.z );
-  }
-  pos.needsUpdate = true;
-*/
+    pos.setXYZ( element.index, vec3.x, vec3.y, vec3.z );
+
+    pos.needsUpdate = true;
+/*
   time += step;
 
   if (time <= 0 || time >=1){
     cont++;
     step = -step 
 
-    /*
+    
     if(cont == 2){
 
       for ( let  x = 0; x < mixer.length; x ++ ) {
@@ -145,8 +122,8 @@ const updateInterpolation = ( element ) => { //Time es la clave es lo que tengo 
 
       }
         
-    }*/
-  }
+    }
+  }*/
 
   ///fin del for mixer
 }
