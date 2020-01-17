@@ -17,7 +17,8 @@ let step = 0.009;
 let executionInter = false;
 let cont = 0;
 let mixer = [];
-let startTime = 0;
+let startTime = [];
+let time = [];
 
 function init() {
 
@@ -32,7 +33,7 @@ function init() {
 
   //cube = createMeshes( scene );
 
-  texts = createParticlesText ( scene, 'l');
+  texts = createParticlesText ( scene, 'l\nJ');
   console.log( texts )
 
   raycaster = new THREE.Raycaster();
@@ -63,8 +64,9 @@ function update() {
 
     if ( INTERSECTED != intersects[ 0 ].index ) {
 
-      mixer.push( intersects[0] );
-      startTime = performance.now();
+      mixer.push( intersects[0]);
+      startTime.push( performance.now() )
+
 
       INTERSECTED = intersects[ 0 ].index;
     }
@@ -75,58 +77,32 @@ function update() {
     INTERSECTED = null;
   }
 
+
+
+
   for ( let  x = 0; x < mixer.length; x ++ ) {
-    updateInterpolation( mixer[x], startTime );
-  }
-}
 
+    const time = ( .001 * ( performance.now()- startTime[x] )) % 6;
 
+    const zigzag = Math.sin( time * Math.PI );
+    //console.log( time )
 
-const updateInterpolation = ( element, startTime ) => { //Time es la clave es lo que tengo que pasar 
-  
-    console.log( startTime )
-    const time = ( .001 * (performance.now()-startTime));
-    console.log( 'time', time, startTime );
+    const theX = interpolation ( mixer[x].point.x , mixer[x].point.x + 1 , zigzag );
+    const theY = interpolation ( mixer[x].point.y, mixer[x].point.y + 1 ,  zigzag );
+    const theZ = interpolation ( mixer[x].point.z, mixer[x].point.z + 1 ,  zigzag );
 
-    const theX = interpolation ( element.point.x , element.point.x + 1 , time );
-    const theY = interpolation ( element.point.y, element.point.y + 1 ,  time );
-    const theZ = interpolation ( element.point.z, element.point.z + 1 ,  time );
-
-    const pos = element.object.geometry.attributes.position;
+    const pos = mixer[x].object.geometry.attributes.position;
     var vec3 = new THREE.Vector3();
 
     vec3.x = theX ;
     vec3.y = theY;
     vec3.z = theZ;
-    pos.setXYZ( element.index, vec3.x, vec3.y, vec3.z );
-
+    pos.setXYZ( mixer[x].index, vec3.x, vec3.y, vec3.z );
     pos.needsUpdate = true;
-/*
-  time += step;
 
-  if (time <= 0 || time >=1){
-    cont++;
-    step = -step 
-
-    
-    if(cont == 2){
-
-      for ( let  x = 0; x < mixer.length; x ++ ) {
-
-        console.log( 'x', x, element.obj, element.index  )
-        if( mixer[x].obj == element.obj){
-
-          mixer.splice(x,1);
-          console.log( mixer )
-        }
-
-      }
-        
-    }
-  }*/
-
-  ///fin del for mixer
+  }
 }
+
 
 function render() {
 
