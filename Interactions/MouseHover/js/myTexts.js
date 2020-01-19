@@ -37,7 +37,7 @@ function createParticlesText( scene, contentText, Allstar ){
 
 		let shapes = font.generateShapes( contentText[i],3);
 
-		const geometry = new THREE.ShapeGeometry( shapes );
+		let geometry = new THREE.ShapeGeometry( shapes );
 		geometry.computeBoundingBox();
 
 		xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
@@ -64,10 +64,14 @@ function createParticlesText( scene, contentText, Allstar ){
 		for ( let  x = 0; x < shapes.length; x ++ ) {
 
 			let shape = shapes[ x ];
-			let points = shape.getSpacedPoints(10);
-			let geometry1 = new THREE.Geometry().setFromPoints( points );
-			geometry1.translate( xMid, - ((i * 1) * 3.5), 0 );
-
+			let points = shape.getSpacedPoints(1);
+			let geometry1 = new THREE.BufferGeometry().setFromPoints( points );
+			console.log( geometry1 )
+			particles = new THREE.Points( geometry1, PointMaterial );
+			lineText.push( particles );
+			scene.add( particles );
+			//geometry1.translate( xMid, - ((i * 1) * 3.5), 0 );
+/*
 			var vertices = geometry1.vertices;
 			var positions = new Float32Array( vertices.length * 3 );
 			var vertex;
@@ -84,6 +88,7 @@ function createParticlesText( scene, contentText, Allstar ){
 			particles = new THREE.Points( geometryParty, PointMaterial );
 			lineText.push( particles );
 			scene.add( particles );
+			*/
 		}
 	}
 	return lineText;

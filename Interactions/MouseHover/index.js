@@ -33,7 +33,7 @@ function init() {
 
   //cube = createMeshes( scene );
 
-  texts = createParticlesText ( scene, 'l\nJ');
+  texts = createParticlesText ( scene, 'L');
   console.log( texts )
 
   raycaster = new THREE.Raycaster();
@@ -58,6 +58,8 @@ function update() {
 
   raycaster.setFromCamera( mouse, camera );
   raycaster.params.Points.threshold = .05;
+  //raycaster.params.Points.threshold = 1;
+
   intersects = raycaster.intersectObjects( texts );
 
   if ( intersects.length > 0 ) {
@@ -66,6 +68,8 @@ function update() {
 
       mixer.push( intersects[0]);
       startTime.push( performance.now() )
+
+      console.log( intersects[0].point )
 
 
       INTERSECTED = intersects[ 0 ].index;
@@ -77,29 +81,42 @@ function update() {
     INTERSECTED = null;
   }
 
-
-
-
   for ( let  x = 0; x < mixer.length; x ++ ) {
 
-    const time = ( .001 * ( performance.now()- startTime[x] )) % 6;
-
+    const time = (( .001 * ( performance.now()- startTime[x] )) % 2);
     const zigzag = Math.sin( time * Math.PI );
-    //console.log( time )
-
-    const theX = interpolation ( mixer[x].point.x , mixer[x].point.x + 1 , zigzag );
-    const theY = interpolation ( mixer[x].point.y, mixer[x].point.y + 1 ,  zigzag );
-    const theZ = interpolation ( mixer[x].point.z, mixer[x].point.z + 1 ,  zigzag );
+    console.log( time );
 
     const pos = mixer[x].object.geometry.attributes.position;
     var vec3 = new THREE.Vector3();
 
-    vec3.x = theX ;
-    vec3.y = theY;
-    vec3.z = theZ;
+    vec3.x = zigzag;
+    vec3.y = zigzag;
+    vec3.z = zigzag;
     pos.setXYZ( mixer[x].index, vec3.x, vec3.y, vec3.z );
     pos.needsUpdate = true;
 
+    /*
+   
+
+    const theX = interpolation ( mixer[x].point.x , mixer[x].point.x + 3 , zigzag );
+    const theY = interpolation ( mixer[x].point.y, mixer[x].point.y + 3 ,  zigzag );
+    const theZ = interpolation ( mixer[x].point.z, mixer[x].point.z + 3 ,  zigzag );
+
+
+
+    if ( time >= 0.98){
+
+       pos.setXYZ( mixer[x].index, mixer[x].point.x, mixer[x].point.y, mixer[x].point.z );
+       pos.needsUpdate = true;
+       console.log( 'stop', mixer[x].point, scene )
+
+       mixer.splice( x ,1);
+       startTime.splice( x ,1);
+
+
+    }; 
+*/
   }
 }
 
