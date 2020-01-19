@@ -21,28 +21,24 @@ let PointMaterial = new THREE.PointsMaterial({
 	color: 0x888888,
 	size: .2,
 });
-let particles;
 
 
-function createParticlesText( scene, contentText, Allstar ){
+
+function createParticlesText( scene, contentText ){
 
 	const loader = new THREE.FontLoader();
 	const font = loader.parse( fontJSON );
+	var xMid;
+	let thePoints = [];
 
-	contentText = contentText.split('\n');
-	var lineText = []
-	var points, xMid;
+		let shapes = font.generateShapes( contentText,1);
 
-	for( let i = 0; i < contentText.length ; i ++ ){ 
-
-		let shapes = font.generateShapes( contentText[i],3);
-
-		let geometry = new THREE.ShapeGeometry( shapes );
+		let geometry = new THREE.ShapeBufferGeometry( shapes );
 		geometry.computeBoundingBox();
 
 		xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
 		geometry.translate( xMid, 0, 0 );
-	
+
 		let holeShapes = [];
 
 		for ( let q = 0; q < shapes.length; q ++ ) {
@@ -64,34 +60,21 @@ function createParticlesText( scene, contentText, Allstar ){
 		for ( let  x = 0; x < shapes.length; x ++ ) {
 
 			let shape = shapes[ x ];
-			let points = shape.getSpacedPoints(1);
-			let geometry1 = new THREE.BufferGeometry().setFromPoints( points );
-			console.log( geometry1 )
-			particles = new THREE.Points( geometry1, PointMaterial );
-			lineText.push( particles );
-			scene.add( particles );
-			//geometry1.translate( xMid, - ((i * 1) * 3.5), 0 );
-/*
-			var vertices = geometry1.vertices;
-			var positions = new Float32Array( vertices.length * 3 );
-			var vertex;
+			let points = shape.getSpacedPoints(3) ;
 
-			for ( var ix = 0, l = vertices.length; ix < l; ix ++ ) {
+			points.forEach( ( element ) => {
+				thePoints.push( element )
+			});
 
-				vertex = vertices[ ix ];
-				vertex.toArray( positions, ix * 3 );
-
-			}
-			var geometryParty = new THREE.BufferGeometry();
-			geometryParty.setAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
-
-			particles = new THREE.Points( geometryParty, PointMaterial );
-			lineText.push( particles );
-			scene.add( particles );
-			*/
 		}
-	}
-	return lineText;
+
+		let geoParticles = new THREE.BufferGeometry().setFromPoints( thePoints );
+
+		let particles = new THREE.Points( geoParticles, PointMaterial );
+		scene.add( particles );
+		
+
+	return particles;
 
 }
 

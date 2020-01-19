@@ -33,8 +33,7 @@ function init() {
 
   //cube = createMeshes( scene );
 
-  texts = createParticlesText ( scene, 'L');
-  console.log( texts )
+  texts = createParticlesText ( scene, '.');
 
   raycaster = new THREE.Raycaster();
   mouse = new THREE.Vector2();
@@ -58,52 +57,82 @@ function update() {
 
   raycaster.setFromCamera( mouse, camera );
   raycaster.params.Points.threshold = .05;
-  //raycaster.params.Points.threshold = 1;
 
-  intersects = raycaster.intersectObjects( texts );
+  intersects = raycaster.intersectObject( texts );
 
   if ( intersects.length > 0 ) {
 
-    if ( INTERSECTED != intersects[ 0 ].index ) {
+      const{ x,y } = intersects[ 0 ].point;
 
-      mixer.push( intersects[0]);
-      startTime.push( performance.now() )
+      console.log( 'intersects : ', x,y, intersects )
 
-      console.log( intersects[0].point )
+      const pos = texts.geometry.attributes.position;
+
+      for (var i = 0, l = pos.count; i < l; i++) {
+
+          console.log ( 'pos : ',pos.getX(i), pos.getY(i) )
+
+          const mouseDistance = distance( x, y, pos.getX(i), pos.getY(i) );
+          console.log ( 'distance : ', mouseDistance )
+
+          const maxPositionY = 2;
+          const minPositionY = 0;
+          const startDistance = 1;
+          const endDistance = 0;
+
+          const dobleYeah = map( mouseDistance, startDistance, endDistance, minPositionY, maxPositionY );
+          console.log('result', dobleYeah );
+
+          pos.setXYZ( intersects[0].index , dobleYeah, 0, 0);
+          pos.needsUpdate = true;
+}
 
 
-      INTERSECTED = intersects[ 0 ].index;
-    }
+        
+        
 
-  } else if ( INTERSECTED !== null ) {
 
-    //console.log('pos no');
-    INTERSECTED = null;
+
+      //mixer.push( intersects[0] );
+      //startTime.push( performance.now() )
+
+
   }
+
+/*
+  const pos = texts.geometry.attributes.position;
+  console.log( pos)
+
+  for (var i = 0, l = pos.count; i < l; i++) {
+
+    const mouseDistance = distance( check.x, check.y,0,0  );
+
+
+
+
+  }*/
+
+
+  
+
+
+  /*
 
   for ( let  x = 0; x < mixer.length; x ++ ) {
 
-    const time = (( .001 * ( performance.now()- startTime[x] )) % 2);
-    const zigzag = Math.sin( time * Math.PI );
-    console.log( time );
+    const time = (( .001 * ( performance.now()- startTime[x] )) % 2)/2;
+    const theX = interpolation ( mixer[x].point.x, mixer[x].point.x + 3 , time );
+    const theY = interpolation ( mixer[x].point.y, mixer[x].point.y + 3 ,  time );
+    const theZ = interpolation ( mixer[x].point.z, mixer[x].point.z + 3 ,  time );
 
     const pos = mixer[x].object.geometry.attributes.position;
     var vec3 = new THREE.Vector3();
 
-    vec3.x = zigzag;
-    vec3.y = zigzag;
-    vec3.z = zigzag;
+    vec3.x = theX;
+    vec3.y = theY;
+    vec3.z = theZ;
     pos.setXYZ( mixer[x].index, vec3.x, vec3.y, vec3.z );
     pos.needsUpdate = true;
-
-    /*
-   
-
-    const theX = interpolation ( mixer[x].point.x , mixer[x].point.x + 3 , zigzag );
-    const theY = interpolation ( mixer[x].point.y, mixer[x].point.y + 3 ,  zigzag );
-    const theZ = interpolation ( mixer[x].point.z, mixer[x].point.z + 3 ,  zigzag );
-
-
 
     if ( time >= 0.98){
 
@@ -116,8 +145,9 @@ function update() {
 
 
     }; 
-*/
+
   }
+  */
 }
 
 
@@ -125,6 +155,14 @@ function render() {
 
   renderer.render( scene, camera );
 
+}
+
+const distance = (x1, y1, x2, y2) => {
+  return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+}
+
+const map = (value, start1, stop1, start2, stop2) => {
+  return (value - start1) / (stop1 - start1) * (stop2 - start2) + start2
 }
 
 
