@@ -34,7 +34,7 @@ function init() {
 
   //cube = createMeshes( scene );
 
-  texts = createParticlesText ( scene, 'ola que tal ');
+  texts = createParticlesText ( scene, 'deja de fliparlo');
   console.log( texts )
   renderer = createRenderer( container );
 
@@ -53,24 +53,25 @@ function init() {
 
 function check( value, array ){
 
- 
-
   for ( let  x = 0; x < array.length; x ++ ) {
 
-    if( array[x].index == value ){
-
+    if( array[x].id == value ){
+      //console.log( 'existe', value)
       return true ;
     }
-
-    
   }
+
+  return false;
 }
+
+
+let pId = 321324654321;
 
 function update() {
   stats.update();
 
   raycaster.setFromCamera( mouse, camera );
-  //raycaster.params.Points.threshold = .05;
+  raycaster.params.Points.threshold = 1;
 
   var geometry = texts.geometry;
   var attributes = geometry.attributes;
@@ -80,33 +81,43 @@ function update() {
   if ( intersects.length > 0 ) {
 
 
-      const{ x,y } = intersects[ 0 ].point;
+
+      const { x,y } = intersects[ 0 ].point;
 
       const pos = texts.geometry.attributes.position;
 
-      for (var i = 0, l = pos.count; i < l; i++) {
+      for ( var i = 0, l = pos.count; i < l; i++) {
 
           const mouseDistance = distance( x, y, pos.getX(i), pos.getY(i) );
 
-          if( mouseDistance < 200 ){
+          if( mouseDistance < 50 ){
 
-            var obj = {
+            const exist = check( i, mixer );
 
-              id: intersects[ 0 ].index,
-              time: 0 ,
-              step: 0.02,
-              initPosi: intersects[ 0 ].point ,
-              cont: 0,
+            if( exist == false ){
 
-            }
-            //console.log( obj )
+              const obj = {
 
-            mixer.push( obj )
+                id: i,
+                time: 0 ,
+                step: 0.02,
+                initPosi: new THREE.Vector3( pos.getX(i), pos.getY(i), pos.getZ(i) ) ,
+                cont: 0,
 
+              }
+              //console.log( 'no existe', i )
+              mixer.push( obj );
+              //console.log( 'mixer', mixer)
+            
+            } 
           }
 
       }
+      /*
+     if( intersects[ 0 ].index == pId) return
 
+      pId = intersects[ 0 ].index; 
+    */
 
   }
 
@@ -114,22 +125,32 @@ function update() {
   mixer.forEach( ( obj,i ) => {
 
     const pos = texts.geometry.attributes.position;
-    const theX = interpolation ( obj.initPosi.x ,  20 , obj.time );
+    const theX = interpolation ( obj.initPosi.x ,  5 , obj.time );
 
     pos.setX( obj.id, theX );
     pos.needsUpdate = true;
 
     obj.time += obj.step;
     if (obj.time <= 0 || obj.time >=1){
-      
-      obj.cont+=1
+      obj.step = -obj.step;
+      obj.cont += 1
       if( obj.cont == 2){
         //console.log('in 2')
         pos.setXYZ( obj.id, obj.initPosi.x, obj.initPosi.y, obj.initPosi.z );
         pos.needsUpdate = true;
-        delete mixer[i]
+        obj.step = 0;
       }
-      obj.step = -obj.step;
+
+      /*
+      obj.cont+=1
+      if( obj.cont == 2){
+        console.log('in 2')
+        pos.setXYZ( obj.id, obj.initPosi.x, obj.initPosi.y, obj.initPosi.z );
+        pos.needsUpdate = true;
+        //delete mixer[i]
+      }
+      */
+      
     }
 
 

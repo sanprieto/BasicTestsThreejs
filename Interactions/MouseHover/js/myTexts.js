@@ -19,7 +19,7 @@ let letterSetting = {
 };
 let PointMaterial = new THREE.PointsMaterial({
 	color: 0x888888,
-	size: 1,
+	size: 10,
 });
 
 
@@ -31,7 +31,7 @@ function createParticlesText( scene, contentText ){
 	var xMid;
 	let thePoints = [];
 
-		let shapes = font.generateShapes( contentText,10);
+		let shapes = font.generateShapes( contentText,100);
 
 		let geometry = new THREE.ShapeGeometry( shapes );
 		geometry.computeBoundingBox();
@@ -62,7 +62,7 @@ function createParticlesText( scene, contentText ){
 		for ( let  x = 0; x < shapes.length; x ++ ) {
 
 			let shape = shapes[ x ];
-			let points = shape.getSpacedPoints(100) ;
+			let points = shape.getSpacedPoints(1000) ;
 
 			points.forEach( ( element ) => {
 				thePoints.push( element )
