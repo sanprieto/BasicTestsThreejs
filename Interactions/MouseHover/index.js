@@ -12,13 +12,14 @@ import { createParticlesText } from '/js/myTexts';
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera, container, renderer, scene, cube, imgOne, imgTwo, texts, INTERSECTED ,intersects, mouse, raycaster;
-let step = 0.009;
-let executionInter = false;
-let cont = 0;
-let mixer = [];
-let startTime = [];
-let time = [];
+let camera, container, renderer, scene, cube, imgOne, imgTwo, texts, intersects;
+
+let INTERSECTED ;
+let mixer =[]
+let raycaster = new THREE.Raycaster();
+let mouse = new THREE.Vector2(1,1);
+
+
 
 function init() {
 
@@ -33,11 +34,8 @@ function init() {
 
   //cube = createMeshes( scene );
 
-  texts = createParticlesText ( scene, '.');
-
-  raycaster = new THREE.Raycaster();
-  mouse = new THREE.Vector2();
-
+  texts = createParticlesText ( scene, 'ola que tal ');
+  console.log( texts )
   renderer = createRenderer( container );
 
   renderer.setAnimationLoop( () => {
@@ -52,40 +50,207 @@ function init() {
 
 }
 
+
+function check( value, array ){
+
+ 
+
+  for ( let  x = 0; x < array.length; x ++ ) {
+
+    if( array[x].index == value ){
+
+      return true ;
+    }
+
+    
+  }
+}
+
 function update() {
   stats.update();
 
   raycaster.setFromCamera( mouse, camera );
-  raycaster.params.Points.threshold = .05;
+  //raycaster.params.Points.threshold = .05;
+
+  var geometry = texts.geometry;
+  var attributes = geometry.attributes;
 
   intersects = raycaster.intersectObject( texts );
 
   if ( intersects.length > 0 ) {
 
-      const{ x,y } = intersects[ 0 ].point;
 
-      console.log( 'intersects : ', x,y, intersects )
+      const{ x,y } = intersects[ 0 ].point;
 
       const pos = texts.geometry.attributes.position;
 
       for (var i = 0, l = pos.count; i < l; i++) {
 
-          console.log ( 'pos : ',pos.getX(i), pos.getY(i) )
+          const mouseDistance = distance( x, y, pos.getX(i), pos.getY(i) );
+
+          if( mouseDistance < 200 ){
+
+            var obj = {
+
+              id: intersects[ 0 ].index,
+              time: 0 ,
+              step: 0.02,
+              initPosi: intersects[ 0 ].point ,
+              cont: 0,
+
+            }
+            //console.log( obj )
+
+            mixer.push( obj )
+
+          }
+
+      }
+
+
+  }
+
+
+  mixer.forEach( ( obj,i ) => {
+
+    const pos = texts.geometry.attributes.position;
+    const theX = interpolation ( obj.initPosi.x ,  20 , obj.time );
+
+    pos.setX( obj.id, theX );
+    pos.needsUpdate = true;
+
+    obj.time += obj.step;
+    if (obj.time <= 0 || obj.time >=1){
+      
+      obj.cont+=1
+      if( obj.cont == 2){
+        //console.log('in 2')
+        pos.setXYZ( obj.id, obj.initPosi.x, obj.initPosi.y, obj.initPosi.z );
+        pos.needsUpdate = true;
+        delete mixer[i]
+      }
+      obj.step = -obj.step;
+    }
+
+
+
+
+
+  });
+
+
+
+
+    //console.log( obj )
+
+
+
+
+
+/*
+  if ( intersects.length > 0 ) {
+
+
+
+
+
+      const{ x,y } = intersects[ 0 ].point;
+
+      const pos = texts.geometry.attributes.position;
+
+      for (var i = 0, l = pos.count; i < l; i++) {
 
           const mouseDistance = distance( x, y, pos.getX(i), pos.getY(i) );
-          console.log ( 'distance : ', mouseDistance )
 
-          const maxPositionY = 2;
-          const minPositionY = 0;
-          const startDistance = 1;
-          const endDistance = 0;
+          if( mouseDistance < 200 ){
 
-          const dobleYeah = map( mouseDistance, startDistance, endDistance, minPositionY, maxPositionY );
-          console.log('result', dobleYeah );
+            var obj = {
 
-          pos.setXYZ( intersects[0].index , dobleYeah, 0, 0);
-          pos.needsUpdate = true;
+              id: intersects[ 0 ].index,
+              time: 0 ,
+              step: 0.02,
+              initPosi: intersects[ 0 ].point ,
+              cont: 0,
+
+            }
+
+            mixer.push( obj )
+
+          }
+
+      }
+
+
+  }
+
+
+  mixer.forEach( ( obj,i ) => {
+
+
+
+    const pos = texts.geometry.attributes.position;
+    const theX = interpolation ( obj.initPosi.x ,  20 , obj.time );
+
+    pos.setX( obj.id, theX );
+    pos.needsUpdate = true;
+
+    obj.time += obj.step;
+    if (obj.time <= 0 || obj.time >=1){
+      
+      obj.cont+=1
+      if( obj.cont == 2){
+        console.log('in 2')
+        pos.setXYZ( obj.id, obj.initPosi.x, obj.initPosi.y, obj.initPosi.z );
+        pos.needsUpdate = true;
+        delete mixer[i]
+      }
+      obj.step = -obj.step;
+    }
+
+
+
+
+
+  });
+
+  mixer.forEach( ( element, o ) => {
+
+    const pos = texts.geometry.attributes.position;
+    const theX = interpolation ( pos.getX(element),  10 , time[o] );
+
+    pos.setX( element, theX );
+    pos.needsUpdate = true;
+
+    time[o] += steps[o];
+    if (time[o] <= 0 || time[o] >=1){
+      steps[o] = -steps[o];
+    }
+    
+  });
+
+
+      const pos = texts.geometry.attributes.position;
+      for (var i = 0, l = pos.count; i < l; i++) {
+
+          const mouseDistance = distance( x, y, pos.getX(i), pos.getY(i) );
+          //console.log ( 'distance : ',i,INTERSECTED,  mouseDistance )
+
+          if( mouseDistance < 10 ){
+
+            mixer.push( intersects[0] );
+            //const theX = interpolation ( pos.getX(i), pos.getX(i) + 3 , time );
+          
+            pos.setX( i,  time  );
+            pos.needsUpdate = true;
+
+
+          }
+
+      }
+      */
 }
+
+
 
 
         
@@ -97,7 +262,7 @@ function update() {
       //startTime.push( performance.now() )
 
 
-  }
+  
 
 /*
   const pos = texts.geometry.attributes.position;
@@ -148,7 +313,6 @@ function update() {
 
   }
   */
-}
 
 
 function render() {

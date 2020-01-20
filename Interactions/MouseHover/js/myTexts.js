@@ -19,7 +19,7 @@ let letterSetting = {
 };
 let PointMaterial = new THREE.PointsMaterial({
 	color: 0x888888,
-	size: .2,
+	size: 1,
 });
 
 
@@ -31,13 +31,15 @@ function createParticlesText( scene, contentText ){
 	var xMid;
 	let thePoints = [];
 
-		let shapes = font.generateShapes( contentText,1);
+		let shapes = font.generateShapes( contentText,10);
 
-		let geometry = new THREE.ShapeBufferGeometry( shapes );
+		let geometry = new THREE.ShapeGeometry( shapes );
 		geometry.computeBoundingBox();
+
 
 		xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
 		geometry.translate( xMid, 0, 0 );
+		geometry.center();
 
 		let holeShapes = [];
 
@@ -60,7 +62,7 @@ function createParticlesText( scene, contentText ){
 		for ( let  x = 0; x < shapes.length; x ++ ) {
 
 			let shape = shapes[ x ];
-			let points = shape.getSpacedPoints(3) ;
+			let points = shape.getSpacedPoints(100) ;
 
 			points.forEach( ( element ) => {
 				thePoints.push( element )
@@ -69,6 +71,7 @@ function createParticlesText( scene, contentText ){
 		}
 
 		let geoParticles = new THREE.BufferGeometry().setFromPoints( thePoints );
+		geoParticles.translate( xMid, 0, 0 );
 
 		let particles = new THREE.Points( geoParticles, PointMaterial );
 		scene.add( particles );
