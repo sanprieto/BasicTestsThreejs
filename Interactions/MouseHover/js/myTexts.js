@@ -22,9 +22,7 @@ let PointMaterial = new THREE.PointsMaterial({
 	size: 10,
 });
 
-
-
-function createParticlesText( scene, contentText ){
+function createParticlesLineText( scene, contentText ){
 
 	const loader = new THREE.FontLoader();
 	const font = loader.parse( fontJSON );
@@ -62,7 +60,7 @@ function createParticlesText( scene, contentText ){
 		for ( let  x = 0; x < shapes.length; x ++ ) {
 
 			let shape = shapes[ x ];
-			let points = shape.getSpacedPoints(1000) ;
+			let points = shape.getSpacedPoints(1) ;
 
 			points.forEach( ( element ) => {
 				thePoints.push( element )
@@ -151,4 +149,4 @@ function createTextByLetters( scene, contentText ){
 
 
 
-export { createParticlesText };
+export { createParticlesLineText };

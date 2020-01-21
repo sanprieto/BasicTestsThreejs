@@ -16,17 +16,19 @@ function createMaterials(  ) {
 
 function createGeometries() {
 
-  const box = new THREE.BoxBufferGeometry( );
+  const box = new THREE.PlaneGeometry( 100,100 );
 
   return box;
 }
 
 function createMeshes( scene, img ) {
-  //const materials = createMaterials(img);
-  const geometries = createGeometries();
-  const obj = new THREE.Mesh( geometries, img );
-  obj.castShadow = true;
+
+  const geometry = new THREE.PlaneGeometry( 500,300 );
+  const material = new THREE.MeshBasicMaterial( {color: 0xffff00,transparent: true, opacity: .2} );
+  const obj = new THREE.Mesh( geometry, material );
+  scene.add( obj );
   obj.receiveShadow = true;
+  obj.position.z = -.7;
   scene.add( obj );
 
   return obj;
