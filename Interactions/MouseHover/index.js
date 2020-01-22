@@ -12,11 +12,11 @@ import { createParticlesLineText } from '/js/myTexts';
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera, container, renderer, scene, cube, imgOne, imgTwo, texts;
+let camera, container, renderer, scene, cube, imgOne, imgTwo, texts, geometry ;
 let plane;
 
 let raycaster = new THREE.Raycaster();
-let mouse = new THREE.Vector2();
+let mouse = new THREE.Vector2(1000,1000);
 
 function init() {
 
@@ -33,8 +33,10 @@ function init() {
 
   //texts = createParticlesLineText ( scene, 'Se trata del area donde se encuentra el mouse. en base a mouseDistance todo lo que este ahí se repele y cuando no todo vuelve a su sitio. Eres tonto.');
 
-  texts = createParticlesLineText ( scene, 'X');
-  console.log( texts )
+  texts = createParticlesLineText ( scene, 'PUto cabezon');
+  geometry = new THREE.BufferGeometry();
+  geometry.copy( texts.geometry );
+
   renderer = createRenderer( container );
 
   renderer.setAnimationLoop( () => {
@@ -58,7 +60,7 @@ function check( value, array ){
       //console.log( 'existe', value)
       return true ;
     }
-  }
+  } 
 
   return false;
 }
@@ -77,49 +79,54 @@ function update() {
     const my = intersects[ 0 ].point.y;
 
     const pos = texts.geometry.attributes.position;
-    const copy = texts.geometry.attributes.position;
+    const copy = geometry.attributes.position;
 
     for ( var i = 0, l = pos.count; i < l; i++) {
 
       const initX = copy.getX(i);
-      const initY = copy.getX(i);
+      const initY = copy.getY(i);
 
       const px = pos.getX(i);
       const py = pos.getY(i);
 
-      const dx = px - mx;
-      const dy = py - my;
+      //const dx = px - mx;
+      //const dy = py - my;
 
-      const mouseDistance = distance( mx, my, px, py);
+      const dx = mx - px;
+      const dy = mx - py;
+
+      var dist = Math.sqrt(dx*dx + dy*dy);
 
       
+      if( dist < 10 ){
 
-      if( mouseDistance < 50 ){
+        const ax = dx;
 
-        px += dx/50;
-        py += dy/50;
-
-        pos.setXY( i, px, py );
+        px -= ax/25;
+     
+        pos.setX( i, px );
+        //pos.setXY( i, px, py );
         pos.needsUpdate = true;
 
 
       }
-      console.log( px, initX)
 
-      /*
+      const dxo = px - initX ;
+      px -= dxo/50;
 
-      }else{
+      pos.setX( i, px);
+      pos.needsUpdate = true;
 
+
+/*
         px -= dx/100;
-        py -= dy/100;
+        //py -= dy/100;
 
-        pos.setXY( i, px, py );
-        pos.needsUpdate = true;
+        pos.setX( i, px);
+        pos.needsUpdate = true;*/
 
 
-
-      }*/
-
+      
 
     }
     
@@ -205,7 +212,10 @@ function render() {
 
 }
 
+
+
 const distance = (x1, y1, x2, y2) => {
+ 
   return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
 }
 

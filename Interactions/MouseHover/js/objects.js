@@ -23,7 +23,7 @@ function createGeometries() {
 
 function createMeshes( scene, img ) {
 
-  const geometry = new THREE.PlaneGeometry( 500,300 );
+  const geometry = new THREE.PlaneGeometry( 1500,1300 );
   const material = new THREE.MeshBasicMaterial( {color: 0xffff00,transparent: true, opacity: .2} );
   const obj = new THREE.Mesh( geometry, material );
   scene.add( obj );
