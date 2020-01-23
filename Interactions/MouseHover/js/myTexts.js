@@ -4,7 +4,6 @@ import fontJSON from '../fonts/Montserrat_Regular.typeface.json';
 let line = [];
 let fullText = [];
 let letters;
-let allParticles =[];
 
 let material = new THREE.MeshPhongMaterial( { color: 0x6699ff, wireframe: true } ); 
 let letterSetting = {
@@ -30,10 +29,8 @@ function createParticlesLineText( scene, contentText ){
 	let thePoints = [];
 
 		let shapes = font.generateShapes( contentText,10);
-
 		let geometry = new THREE.ShapeGeometry( shapes );
 		geometry.computeBoundingBox();
-
 
 		xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
 		geometry.translate( xMid, 0, 0 );
@@ -60,7 +57,7 @@ function createParticlesLineText( scene, contentText ){
 		for ( let  x = 0; x < shapes.length; x ++ ) {
 
 			let shape = shapes[ x ];
-			let points = shape.getSpacedPoints(3) ;
+			let points = shape.getSpacedPoints(200) ;
 
 			points.forEach( ( element ) => {
 				thePoints.push( element )
@@ -78,6 +75,7 @@ function createParticlesLineText( scene, contentText ){
 	return particles;
 
 }
+
 
 function createTextByLines( scene, contentText ){
 

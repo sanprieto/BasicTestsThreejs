@@ -31,9 +31,7 @@ function init() {
 
   plane = createMeshes( scene );
 
-  //texts = createParticlesLineText ( scene, 'Se trata del area donde se encuentra el mouse. en base a mouseDistance todo lo que este ahí se repele y cuando no todo vuelve a su sitio. Eres tonto.');
-
-  texts = createParticlesLineText ( scene, 'PUto cabezon');
+  texts = createParticlesLineText ( scene, 'NEW GENERATION\n   OF WEBSITES.');
   geometry = new THREE.BufferGeometry();
   geometry.copy( texts.geometry );
 
@@ -52,20 +50,6 @@ function init() {
 }
 
 
-function check( value, array ){
-
-  for ( let  x = 0; x < array.length; x ++ ) {
-
-    if( array[x].id == value ){
-      //console.log( 'existe', value)
-      return true ;
-    }
-  } 
-
-  return false;
-}
-
-
 function update() {
   stats.update();
 
@@ -77,6 +61,7 @@ function update() {
 
     const mx = intersects[ 0 ].point.x;
     const my = intersects[ 0 ].point.y;
+    const mz = intersects[ 0 ].point.z;
 
     const pos = texts.geometry.attributes.position;
     const copy = geometry.attributes.position;
@@ -85,125 +70,48 @@ function update() {
 
       const initX = copy.getX(i);
       const initY = copy.getY(i);
+      const initZ = copy.getZ(i);
 
       const px = pos.getX(i);
       const py = pos.getY(i);
-
-      //const dx = px - mx;
-      //const dy = py - my;
+      const pz = pos.getZ(i);
 
       const dx = mx - px;
-      const dy = mx - py;
+      const dy = my - py;
+      const dz = mz - pz;
 
-      var dist = Math.sqrt(dx*dx + dy*dy);
+      const mouseDistance = distance( mx, my, px, py )
 
-      
-      if( dist < 10 ){
+      if( mouseDistance < 18 ){
 
         const ax = dx;
+        const ay = dy;
+        const az = dz;
 
-        px -= ax/25;
-     
-        pos.setX( i, px );
-        //pos.setXY( i, px, py );
+        px -= ax/60;
+        py -= ay/60;
+        pz -= az/60;
+        
+        pos.setXYZ( i, px, py, pz );
         pos.needsUpdate = true;
 
 
       }
+      const dxo = px - initX;
+      const dyo = py - initY;
+      const dzo = pz - initZ;
 
-      const dxo = px - initX ;
-      px -= dxo/50;
+      px -= dxo/65;
+      py -= dyo/65;
+      pz -= dzo/65;
 
-      pos.setX( i, px);
+      pos.setXYZ( i, px, py, pz );
       pos.needsUpdate = true;
-
-
-/*
-        px -= dx/100;
-        //py -= dy/100;
-
-        pos.setX( i, px);
-        pos.needsUpdate = true;*/
-
-
-      
 
     }
     
   }
 }
-
-  /*
-
-  var geometry = texts.geometry;
-  var attributes = geometry.attributes;
-
-  intersects = raycaster.intersectObject( texts );
-
-  if ( intersects.length > 0 ) {
-
-    console.log('eoo')
-      const { x,y } = intersects[ 0 ].point;
-
-      const pos = texts.geometry.attributes.position;
-
-      for ( var i = 0, l = pos.count; i < l; i++) {
-
-          const mouseDistance = distance( x, y, pos.getX(i), pos.getY(i) );
-
-          if( mouseDistance < 50 ){
-
-            const exist = check( i, mixer );
-
-            if( exist == false ){
-
-              const obj = {
-
-                id: i,
-                time: 0 ,
-                step: 0.02,
-                initPosi: new THREE.Vector3( pos.getX(i), pos.getY(i), pos.getZ(i) ) ,
-                cont: 0,
-
-              }
-              //console.log( 'no existe', i )
-              mixer.push( obj );
-              //console.log( 'mixer', mixer)
-            
-            } 
-          }
-
-      }
-
-
-  }
-
-
-  mixer.forEach( ( obj,i ) => {
-
-    const pos = texts.geometry.attributes.position;
-    const theX = interpolation ( obj.initPosi.x ,  5 , obj.time );
-
-    pos.setX( obj.id, theX );
-    pos.needsUpdate = true;
-
-    obj.time += obj.step;
-    if (obj.time <= 0 || obj.time >=1){
-      obj.step = -obj.step;
-      obj.cont += 1
-      if( obj.cont == 2){
-        //console.log('in 2')
-        pos.setXYZ( obj.id, obj.initPosi.x, obj.initPosi.y, obj.initPosi.z );
-        pos.needsUpdate = true;
-        obj.step = 0;
-      }
-      
-    }
-
-
-  });
-  */
-
 
 
 function render() {
@@ -219,13 +127,6 @@ const distance = (x1, y1, x2, y2) => {
   return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
 }
 
-const map = (value, start1, stop1, start2, stop2) => {
-  return (value - start1) / (stop1 - start1) * (stop2 - start2) + start2
-}
-
-
-const interpolation = ( a, b , t ) => { return a + ( b - a ) * t };
-const ease = ( t ) => { return t<0.5 ? 2*t*t : -1+(4-2*t)*t }
 
 function onDocumentMouseMove( event ) {
 
