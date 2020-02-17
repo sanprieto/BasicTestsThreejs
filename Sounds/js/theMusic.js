@@ -21,6 +21,7 @@ function createMusic( camera, urlData ){
 
 	// create an AudioAnalyser, passing in the sound and desired fftSize
 	let analyser = new THREE.AudioAnalyser( sound,32 );
+	console.log( analyser )
 	
 	
 	analyser.analyser.maxDecibels = -30; // -30

@@ -15,6 +15,42 @@ document.body.appendChild( stats.dom );
 
 let camera, container, renderer, scene, cube, imgOne, imgTwo ;
 
+const preload = () => {
+
+  let manager = new THREE.LoadingManager();
+  manager.onLoad = function ( ) {
+    init();
+    console.log( 'begint init()')
+  };
+
+  let loader = new THREE.TextureLoader(manager);
+  loader.load( urlData, function ( texture ) {
+      texture.encoding = THREE.sRGBEncoding;
+      imgOne = new THREE.MeshBasicMaterial( {
+        map: texture
+       } );
+
+  } );
+  let loader2 = new THREE.TextureLoader( manager);
+  loader2.load( urlData2, function ( texture2 ) {
+      texture2.encoding = THREE.sRGBEncoding
+      imgTwo = texture2;
+
+  } );
+}
+
+if (
+  document.readyState === "complete" ||
+  (document.readyState !== "loading" && !document.documentElement.doScroll)
+) {
+
+  preload();
+  console.log( 'begin preload')
+} else {
+  document.addEventListener("DOMContentLoaded", preload); 
+  console.log( 'begin preload')
+}
+
 function init() {
 
   container = document.querySelector( '#magic' );
@@ -38,6 +74,7 @@ function init() {
     render();
 
   } );
+  window.addEventListener( 'resize', onWindowResize );
 
 }
 
@@ -61,41 +98,5 @@ function onWindowResize() {
 
 }
 
-window.addEventListener( 'resize', onWindowResize );
 
-var manager = new THREE.LoadingManager();
-manager.onStart = function ( url, itemsLoaded, itemsTotal ) {
 
-  console.log( 'Started loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-
-};
-manager.onLoad = function ( ) {
-  init();
-};
-
-manager.onProgress = function ( url, itemsLoaded, itemsTotal ) {
-
-  console.log( 'Loading file: ' + url + '.\nLoaded ' + itemsLoaded + ' of ' + itemsTotal + ' files.' );
-
-};
-
-manager.onError = function ( url ) {
-
-  console.log( 'There was an error loading ' + url );
-
-};
-
-let loader = new THREE.TextureLoader(manager);
-loader.load( urlData, function ( texture ) {
-    texture.encoding = THREE.sRGBEncoding;
-    imgOne = new THREE.MeshBasicMaterial( {
-      map: texture
-     } );
-
-} );
-let loader2 = new THREE.TextureLoader( manager);
-loader2.load( urlData2, function ( texture2 ) {
-    texture2.encoding = THREE.sRGBEncoding
-    imgTwo = texture2;
-
-} );

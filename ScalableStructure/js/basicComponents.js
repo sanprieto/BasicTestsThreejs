@@ -20,6 +20,7 @@ function createRenderer( container ) {
 
   renderer.gammaFactor = 2.2;
   renderer.gammaOutput = true;
+  
 
   renderer.physicallyCorrectLights = true;
 

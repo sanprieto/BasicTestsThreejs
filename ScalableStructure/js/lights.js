@@ -10,7 +10,7 @@ function createLights( scene ) {
 	dirLight.shadow.mapSize.width = 4096;
 	dirLight.shadow.mapSize.height = 4096;
 
-	dirLight.position.set( 200, 350, 100);
+	//dirLight.position.set( 200, 350, 100);
 
 	dirLight.position.set( 1, 1.75, 1 );
 	dirLight.position.multiplyScalar( 300 );
