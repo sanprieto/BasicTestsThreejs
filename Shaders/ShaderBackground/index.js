@@ -22,16 +22,8 @@ function init() {
 
   camera = createCamera( container );
   createOrbitControls( camera, container );
-  createLights( scene );
+  //createLights( scene );
   //createGridHelp( scene );
-
-  const loader = new THREE.TextureLoader();
-  const texture = loader.load( urlData );
-  texture.minFilter = THREE.NearestFilter;
-  texture.magFilter = THREE.NearestFilter;
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-
 
   var geometry = new THREE.PlaneGeometry( 30,20,1,1);
 
@@ -45,15 +37,18 @@ function init() {
 
     void mainImage( out vec4 fragColor, in vec2 fragCoord )
     {
-        // Normalized pixel coordinates (from 0 to 1)
-        vec2 uv = fragCoord/iResolution.xy;
-
-        // Time varying pixel color
-        vec3 col = 0.5 + 0.5*cos(iTime+uv.xyx+vec3(0,2,4));
-
-        // Output to screen
-        fragColor = vec4(col,1.0);
+      vec2 p=(2.0*fragCoord.xy-iResolution.xy)/max(iResolution.x,iResolution.y);
+      for(int i=1;i<10;i++)
+      {
+        vec2 newp=p;
+        newp.x+=0.3/float(i)*sin(float(i)*p.y+iTime+0.3*float(i))+1.0;
+        newp.y+=0.3/float(i)*sin(float(i)*p.x+iTime+0.3*float(i+10))-1.4;
+        p=newp;
+      }
+      vec3 col=vec3(0.2,0.6-(sin(p.y)),sin(p.x+p.y));
+      fragColor=vec4(col, 0.5);
     }
+
         //*********                **********
 
     void main() {

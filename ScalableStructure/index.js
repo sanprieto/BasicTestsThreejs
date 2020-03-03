@@ -20,7 +20,6 @@ const preload = () => {
   let manager = new THREE.LoadingManager();
   manager.onLoad = function ( ) {
     init();
-    console.log( 'begint init()')
   };
 
   let loader = new THREE.TextureLoader(manager);
@@ -43,12 +42,11 @@ if (
   document.readyState === "complete" ||
   (document.readyState !== "loading" && !document.documentElement.doScroll)
 ) {
-
   preload();
-  console.log( 'begin preload')
+
 } else {
   document.addEventListener("DOMContentLoaded", preload); 
-  console.log( 'begin preload')
+
 }
 
 function init() {
