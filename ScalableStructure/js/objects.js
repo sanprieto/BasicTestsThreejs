@@ -24,7 +24,7 @@ function createGeometries() {
 function createMeshes( scene, img ) {
   //const materials = createMaterials(img);
   const geometries = createGeometries();
-  const obj = new THREE.Mesh( geometries, img );
+  const obj = new THREE.Mesh( geometries, new THREE.MeshBasicMaterial( { map: img } ) );
   obj.castShadow = true;
   obj.receiveShadow = true;
   scene.add( obj );
