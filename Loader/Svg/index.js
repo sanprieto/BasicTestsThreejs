@@ -117,44 +117,25 @@ loader3.load( urlData3, function ( data ) {
           group.position.y = 70;
           group.scale.y *= - 1;
           for ( var i = 0; i < paths.length; i ++ ) {
-            var path = paths[ i ];
-            
-            var fillColor = path.userData.style.fill;
-      
-              var material = new THREE.MeshBasicMaterial( {
-                color: new THREE.Color().setStyle( fillColor ).convertSRGBToLinear(),
-                opacity: path.userData.style.fillOpacity,
-                transparent: path.userData.style.fillOpacity < 1,
-                side: THREE.DoubleSide,
-                depthWrite: false,
-                wireframe: false
-              } );
-              var shapes = path.toShapes( true );
-              for ( var j = 0; j < shapes.length; j ++ ) {
-                var shape = shapes[ j ];
-                var geometry = new THREE.ShapeBufferGeometry( shape );
-                var mesh = new THREE.Mesh( geometry, material );
-                group.add( mesh );
-              }
-      
-            var strokeColor = path.userData.style.stroke;
 
-              var material = new THREE.MeshBasicMaterial( {
-                color: new THREE.Color().setStyle( strokeColor ).convertSRGBToLinear(),
-                opacity: path.userData.style.strokeOpacity,
-                transparent: path.userData.style.strokeOpacity < 1,
-                side: THREE.DoubleSide,
-                depthWrite: false,
-                wireframe: false
-              } );
-              for ( var j = 0, jl = path.subPaths.length; j < jl; j ++ ) {
-                var subPath = path.subPaths[ j ];
-                var geometry = SVGLoader.pointsToStroke( subPath.getPoints(), path.userData.style );
-                if ( geometry ) {
+                var path = paths[ i ];
+
+                var material = new THREE.MeshBasicMaterial( {
+                  color: 0x6699FF,
+                  side: THREE.DoubleSide,
+                  depthWrite: false
+                } );
+
+                var shapes = path.toShapes( true );
+
+                for ( var j = 0; j < shapes.length; j ++ ) {
+
+                  var shape = shapes[ j ];
+                  var geometry = new THREE.ShapeBufferGeometry( shape );
                   var mesh = new THREE.Mesh( geometry, material );
                   group.add( mesh );
+
                 }
-              }
             
           }
           myGroup = group;

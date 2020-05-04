@@ -11,19 +11,19 @@ const preload = () => {
 
   let manager = new THREE.LoadingManager();
   manager.onLoad = function ( ) {
-    init( imgOne, imgTwo );
+    init( imgs );
   };
-  let imgOne;
+  let imgs = [];
   const loader = new THREE.TextureLoader(manager).load( require('/img/starts.jpg'), function ( texture ) {
       texture.encoding = THREE.sRGBEncoding;
-      imgOne = texture;
+      imgs[0] = texture;
 
   } );
   let imgTwo
   const loader2 = new THREE.TextureLoader( manager);
   loader2.load( require('/img/brujula.jpg'), function ( texture2 ) {
       texture2.encoding = THREE.sRGBEncoding
-      imgTwo = texture2;
+      imgs[1] = texture2;
 
   } );
 }
@@ -39,7 +39,7 @@ if (
 
 }
 
-function init( imgOne, imgTwo ) {
+function init( imgs ) {
 
   let stats = new Stats();
   document.body.appendChild( stats.dom );
@@ -54,8 +54,8 @@ function init( imgOne, imgTwo ) {
   createLights( scene );
   createGridHelp( scene );
 
-  let cube = createMeshes( scene, imgOne );
-  createImg( scene,0,-4,-11, imgTwo, .2);
+  let cube = createMeshes( scene, imgs[0] );
+  createImg( scene,0,-4,-11, imgs[1], .2);
 
   const renderer = createRenderer( container );
   window.addEventListener( 'resize', onWindowResize );
