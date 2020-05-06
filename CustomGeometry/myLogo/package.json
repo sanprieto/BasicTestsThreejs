@@ -4,12 +4,11 @@
   "description": "Basic algorithms to learn three.js",
   "main": "index.js",
   "dependencies": {
-    "main.css": "^2.0.0",
+    "main.css": "^2.1.0",
     "parcel-bundler": "^1.12.4",
     "stats": "^1.0.0",
     "stats.js": "^0.17.0",
-    "three": "^0.111.0",
-    "three-orbitcontrols": "^2.110.1"
+    "three": "^0.111.0"
   },
   "devDependencies": {},
   "scripts": {
