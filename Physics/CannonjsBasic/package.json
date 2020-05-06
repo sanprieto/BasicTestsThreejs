@@ -1,0 +1,29 @@
+{
+  "name": "theWay",
+  "version": "1.0.0",
+  "description": "Basic algorithms to learn three.js",
+  "main": "index.js",
+  "dependencies": {
+    "cannon": "^0.6.2",
+    "main.css": "^2.0.0",
+    "parcel-bundler": "^1.12.4",
+    "stats.js": "^0.17.0",
+    "three": "^0.111.0",
+    "three-orbitcontrols": "^2.110.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanprieto/BasicTestsThreejs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sanprieto/BasicTestsThreejs/issues"
+  },
+  "homepage": "https://github.com/sanprieto/BasicTestsThreejs#readme"
+}

@@ -11,7 +11,7 @@ const urlData = require('./textures/bayer.png');
 let stats = new Stats();
 document.body.appendChild( stats.dom );
 
-let camera, container, renderer, scene, plane, uniforms, materialX, fragmentShader, vertexShader;
+let camera, container, renderer, scene, plane, cube, uniforms, materialX, fragmentShader, vertexShader;
 
 function init() {
 
@@ -33,7 +33,7 @@ function init() {
   texture.wrapT = THREE.RepeatWrapping;
 
 
-  var geometry = new THREE.PlaneGeometry( 30,20,1,1);
+  // var geometry = new THREE.PlaneGeometry( 30,20,1,1);
 
   fragmentShader = `
   #include <common>
@@ -124,19 +124,37 @@ function init() {
       mainImage(gl_FragColor, gl_FragCoord.xy);
     }
   `;
+
+
+vertexShader = `
+  void main() {
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+      }
+  `;
+
+
     uniforms = {
       iTime: { value: 0 },
       iResolution:  { value: new THREE.Vector3(1, 1, 1) },
 
     };
     materialX = new THREE.ShaderMaterial({
-
-      fragmentShader,
       uniforms,
+      vertexShader,
+      fragmentShader,
+      lights: false,
+      flatShading: true,
+      // blending: THREE.AdditiveBlending,
+      // depthTest: false,
+      // transparent: true
+
     });
 
-  plane = new THREE.Mesh( geometry, materialX );
-  scene.add( plane );
+
+  var material = new THREE.MeshPhongMaterial( { color: 0xffff00 } );
+  var geometry = new THREE.BoxGeometry( 10,10,10);
+  cube = new THREE.Mesh( geometry, materialX );
+  scene.add( cube );
 
   renderer = createRenderer( container );
 
@@ -155,6 +173,11 @@ function update() {
   stats.update();
   uniforms.iResolution.value.set( container.clientWidth, container.clientHeight, 1);
   uniforms.iTime.value = time;
+
+  cube.rotation.x += 0.005;
+  cube.rotation.y += 0.005;
+
+  // cube.position.x += 0.05;
 
 }
 

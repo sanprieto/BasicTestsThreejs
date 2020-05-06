@@ -16,15 +16,15 @@ function createRenderer( container ) {
 
   //renderer.autoClearColor = false;
 
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
+  // renderer.shadowMap.enabled = true;
+  // renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
 
-  renderer.setPixelRatio( window.devicePixelRatio );
+  // renderer.setPixelRatio( window.devicePixelRatio );
 
-  renderer.gammaFactor = 2.2;
-  renderer.gammaOutput = true;
+  // renderer.gammaFactor = 2.2;
+  // renderer.gammaOutput = true;
 
-  renderer.physicallyCorrectLights = true;
+  // renderer.physicallyCorrectLights = true;
 
   container.appendChild( renderer.domElement );
 

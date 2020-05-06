@@ -7,6 +7,7 @@ import { createMeshes, createGridHelp } from '/js/objects';
 import Stats from 'stats.js';
 import { createImg } from '/js/images.js';
 
+
 const preload = () => {
 
   let manager = new THREE.LoadingManager();
