@@ -6,7 +6,7 @@ import { createLights } from '/js/lights';
 import { createMeshes, createGridHelp } from '/js/objects';
 import Stats from 'stats.js';
 import { createImg } from '/js/images';
-import { myLogo } from '/js/myLogo';
+import { customGeo } from '/js/myLogo';
 
 
 const preload = () => {
@@ -16,7 +16,7 @@ const preload = () => {
     init( imgs );
   };
   let imgs = [];
-  const loader = new THREE.TextureLoader(manager).load( require('/img/starts.jpg'), function ( texture ) {
+  const loader = new THREE.TextureLoader(manager).load( require('/img/uv_grid_directx.jpg'), function ( texture ) {
       texture.encoding = THREE.sRGBEncoding;
       imgs[0] = texture;
 
@@ -62,10 +62,56 @@ function init( imgs ) {
   // var material = new THREE.MeshPhongMaterial( { vertexColors: THREE.FaceColors } );
   // var material = new THREE.MeshPhongMaterial( { vertexColors: THREE.VertexColors } );
 
+  const fragmentShader = `
+  #include <common>
+
+    uniform vec3 iResolution;
+    uniform float iTime;
+
+    //********                ***********
+
+    void mainImage( out vec4 fragColor, in vec2 fragCoord )
+    {
+      vec2 p=(2.0*fragCoord.xy-iResolution.xy)/max(iResolution.x,iResolution.y);
+      for(int i=1;i<10;i++)
+      {
+        vec2 newp=p;
+        newp.x+=0.3/float(i)*sin(float(i)*p.y+iTime+0.3*float(i))+1.0;
+        newp.y+=0.3/float(i)*sin(float(i)*p.x+iTime+0.3*float(i+10))-1.4;
+        p=newp;
+      }
+      vec3 col=vec3(0.2,0.6-(sin(p.y)),sin(p.x+p.y));
+      fragColor=vec4(col, 0.5);
+    }
+
+        //*********                **********
+
+    void main() {
+      mainImage(gl_FragColor, gl_FragCoord.xy);
+    }
+  `;
+
+    const uniforms = {
+      iTime: { value: 0 },
+      iResolution:  { value: new THREE.Vector3(1, 1, 1) },
+    };
+
+    let materialX = new THREE.ShaderMaterial({
+      fragmentShader,
+      uniforms,
+    });
+
+    let materialTexture = new THREE.MeshBasicMaterial( {
+      map: imgs[0],
+      color: 0x6699FF
+     } );
+
   var material = new THREE.MeshPhongMaterial( { color: 0x6699FF }  );
-  var logo = new THREE.Mesh( myLogo(), material );
+  var logo = new THREE.Mesh( customGeo(), materialTexture );
   scene.add( logo );
   console.log( logo )
+
+
 
   // createImg( scene,0,-4,-11, imgs[1], .2);
 
@@ -81,6 +127,12 @@ function init( imgs ) {
 
   function update() {
     stats.update();
+    // logo.rotation.x += 0.005;
+    // logo.rotation.y += 0.005;
+
+    const time = 0.001 * performance.now();
+    uniforms.iResolution.value.set( container.clientWidth, container.clientHeight, 1);
+    uniforms.iTime.value = time;
 
   }
 
