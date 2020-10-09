@@ -7,16 +7,32 @@ import { createMeshes, createGridHelp } from '/js/objects';
 import Stats from 'stats.js';
 import { createImg } from '/js/images.js';
 
-
 const preload = () => {
 
-      var startButton = document.getElementById( 'startButton' );
-      startButton.addEventListener( 'click', function () {
+  let manager = new THREE.LoadingManager();
+  manager.onLoad = function ( ) {
 
-        init( );
+    var startButton = document.getElementById( 'startButton' );
+    startButton.addEventListener( 'click', function () {
 
-      }, false );
+      init( imgs );
 
+    }, false );
+    
+  };
+  let imgs = [];
+  const loader = new THREE.TextureLoader(manager).load( require('/img/starts.jpg'), function ( texture ) {
+      texture.encoding = THREE.sRGBEncoding;
+      imgs[0] = texture;
+
+  } );
+  let imgTwo
+  const loader2 = new THREE.TextureLoader( manager);
+  loader2.load( require('/img/brujula.jpg'), function ( texture2 ) {
+      texture2.encoding = THREE.sRGBEncoding
+      imgs[1] = texture2;
+
+  } );
 }
 
 if (
@@ -30,8 +46,8 @@ if (
 
 }
 
-function init( ) {
-
+function init( imgs ) {
+  var sample;
   var overlay = document.getElementById( 'overlay' );
   overlay.remove();
 
@@ -45,9 +61,21 @@ function init( ) {
 
   const camera = createCamera( container );
   createOrbitControls( camera, container );
+
+  var context = new AudioContext();
+
+  // feed video into a MediaElementSourceNode, and feed that into AnalyserNode
+  // due to a bug in Chrome, this must run after onload
+  var videoElement = document.querySelector('video');
+  var mediaSourceNode = context.createMediaElementSource(videoElement);
+  var analyserNode = context.createAnalyser();
+  analyserNode.fftSize = 256;
+  console.log( analyserNode )
+  mediaSourceNode.connect(analyserNode);
+  analyserNode.connect(context.destination);
+
+
   // createLights( scene );
-
-
 
   const geometry = new THREE.PlaneGeometry( );
   let video = document.getElementById( 'video' );
@@ -56,25 +84,28 @@ function init( ) {
   const { width, height } = video.getBoundingClientRect();
   sizes.set( width, height );
   video.play();
-  console.log( video )
+  // video.pause();
+
   video.addEventListener('play', function() {
-            this.currentTime = 3;
+
+    this.currentTime = 3;
+    video.volume = 0.3;
+
   }, false);
 
   var texture = new THREE.VideoTexture( video );
   texture.minFilter = THREE.LinearFilter;
   texture.magFilter = THREE.LinearFilter;
-  texture.format = THREE.RGBFormat;
+  texture.encoding = THREE.sRGBEncoding;
 
   const material = new THREE.MeshBasicMaterial( { color: 0xffffff, map: texture, side: THREE.DoubleSide } );
   const plane = new THREE.Mesh( geometry, material );
   scene.add( plane );
 
-  plane.scale.set( sizes.x, sizes.y , 1)
+  plane.scale.set( 450, 253 , 1)
+  plane.position.y = 200
 
-  console.log( plane )
-
-
+  createImg( scene,0,-200,-1, imgs[1], .2);
 
   const renderer = createRenderer( container );
   window.addEventListener( 'resize', onWindowResize );
@@ -89,6 +120,19 @@ function init( ) {
   function update() {
     stats.update();
 
+    sample = new Float32Array( analyserNode.frequencyBinCount );
+
+    analyserNode.getFloatFrequencyData( sample )
+
+
+    // const result = getAverageFrequency ( sample )
+
+    // console.log( result )
+
+    // plane.position.z = result;
+    // console.log( sample, plane.position.z)
+    // console.log( sample )
+
   }
 
   function render() {
@@ -102,6 +146,20 @@ function init( ) {
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize( container.clientWidth, container.clientHeight );
+
+  }
+
+  function getAverageFrequency ( data ){
+
+    var value = 0;
+
+    for ( var i = 0; i < data.length; i ++ ) {
+
+      value += data[ i ];
+
+    }
+
+    return value / data.length;
 
   }
 }

@@ -9,12 +9,11 @@ function createImg( scene, x, y, z, texture, scale  ){
 
     scale = typeof scale === 'undefined' ? 1 : scale;
 
-    const geometry = new THREE.PlaneBufferGeometry( 40, 40, 180, 180 );
+    const geometry = new THREE.PlaneBufferGeometry( );
     const material = new THREE.MeshBasicMaterial( { map: texture, transparent: true, side: THREE.DoubleSide} );
     const plane = new THREE.Mesh( geometry, material );
     const proporcion = texture.image.width /  texture.image.height;
-    plane.scale.x = scale;
-    plane.scale.y = scale/ proporcion ;
+    plane.scale.set( texture.image.width/6, texture.image.height/6, 1 )
 
     plane.position.set( x,y,z);
     scene.add(plane);

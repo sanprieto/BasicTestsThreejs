@@ -13,8 +13,8 @@ function createImg( scene, x, y, z, texture, scale  ){
     const material = new THREE.MeshBasicMaterial( { map: texture, transparent: true, side: THREE.DoubleSide} );
     const plane = new THREE.Mesh( geometry, material );
     const proporcion = texture.image.width /  texture.image.height;
-    plane.scale.x = scale;
-    plane.scale.y = scale/ proporcion ;
+
+    plane.scale.set(texture.image.width, texture.image.height, 1 )
 
     plane.position.set( x,y,z);
     scene.add(plane);

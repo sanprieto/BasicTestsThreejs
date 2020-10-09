@@ -112,10 +112,11 @@ loader3.load( urlData3, function ( data ) {
 
     var paths = data.paths;
           var group = new THREE.Group();
-          group.scale.multiplyScalar( 0.25 );
-          group.position.x = - 70;
-          group.position.y = 70;
+          group.scale.multiplyScalar( 1.2 );
+          group.position.x = - 100;
+          group.position.y = 150;
           group.scale.y *= - 1;
+          
           for ( var i = 0; i < paths.length; i ++ ) {
 
                 var path = paths[ i ];

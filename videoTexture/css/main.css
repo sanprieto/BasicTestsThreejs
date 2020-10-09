@@ -1,6 +1,8 @@
 #video {
 
-	/*opacity: 0;*/
+	opacity: 1;
+	width: 700px;
+
 }
 
 body {
@@ -68,7 +70,6 @@ a, button, input, select {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background: rgba(0,0,0,0.7);
 }
 
 	#overlay button {
