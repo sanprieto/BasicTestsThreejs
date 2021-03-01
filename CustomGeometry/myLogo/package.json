@@ -8,7 +8,7 @@
     "parcel-bundler": "^1.12.4",
     "stats": "^1.0.0",
     "stats.js": "^0.17.0",
-    "three": "^0.111.0"
+    "three": "^0.125.0"
   },
   "devDependencies": {},
   "scripts": {
