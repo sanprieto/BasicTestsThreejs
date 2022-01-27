@@ -9,7 +9,7 @@
     "parcel-bundler": "^1.12.4",
     "stats": "^1.0.0",
     "stats-js": "^1.0.1",
-    "three": "^0.111.0",
+    "three": "^0.137.0",
     "three-orbitcontrols": "^2.110.1"
   },
   "devDependencies": {},
